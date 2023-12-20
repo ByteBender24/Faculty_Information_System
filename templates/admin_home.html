@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.navbar {
+    background-color: #333;
+    overflow: hidden;
+}
+
+.navbar ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+
+.navbar li {
+    margin-right: 15px;
+}
+
+.navbar a {
+    display: block;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    padding: 14px 16px;
+    transition: background-color 0.3s ease;
+}
+
+.navbar a:hover {
+    background-color: #555;
+}
+
+.content {
+    padding: 20px;
+}
+
+h1 {
+    color: #333;
+}
+
+p {
+    color: #555;
+}
+
+/* Flexbox Container and Items */
+.flex-container {
+    display: flex;
+    justify-content: space-around;
+    align-items: stretch;
+    flex-wrap: wrap;
+}
+
+.flex-item {
+    flex: 1;
+    padding: 20px;
+    margin: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    text-align: center;
+    transition: box-shadow 0.3s ease;
+}
+
+.flex-item:hover {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Responsive Design */
+@media screen and (max-width: 768px) {
+    .flex-container {
+        flex-direction: column;
+    }
+}
+
+    </style>
+    <title>Admin Page</title>
+</head>
+
+<body>
+    
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+    <ul>
+        <li><a href="{% url 'login' %}">Home</a></li>
+        <li><a>Dashboard</a></li>
+        <li><a href="{% url 'admin_home' admin_id=admin_id %}">Add Faculty</a></li>
+        <li><a href="{% url 'manage_faculty' %}">Manage Faculty</a></li>
+        <li><a href="">Reports</a></li>
+        <li><a href="">Settings</a></li>
+        <li><a href="">Logout</a></li>
+    </ul>
+</nav>
+
+    <!-- Content Section -->
+    <div class="content">
+        <h1>Welcome to the Admin Page {{ username }} </h1>
+        <p>This is your dashboard. Choose an option from the navigation bar above.</p>
+
+        <!-- Flexbox Container for Sections -->
+        <div class="flex-container">
+            <div class="flex-item">
+                <h2>Add Faculty</h2>
+                <p>Use this section to add new faculty members to the system.</p>
+                <a href="{% url 'add_faculty' admin_id %}">Go to Add Faculty</a>
+            </div>
+            <div class="flex-item">
+                <h2>Manage Faculty</h2>
+                <p>View and edit information for existing faculty members.</p>
+                <a href="{% url 'manage_faculty' %}">Go to Manage Faculty</a>
+            </div>
+            <div class="flex-item">
+        <h2>Search Faculty</h2>
+        <p>Search for faculty members.</p>
+        <a href="{% url 'search_faculty' %}">Go to Search Faculty</a>
+    </div>
+    <div class="flex-item">
+        <h2>Report Generation</h2>
+        <p>Generate reports for faculty members.</p>
+        <a href="{% url 'report_generation' %}">Go to Report Generation</a>
+    </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

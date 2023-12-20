@@ -1,0 +1,102 @@
+<!-- update_faculty.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Faculty</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        header {
+            background-color: #343a40;
+            color: white;
+            text-align: center;
+            padding: 10px;
+        }
+
+        .container {
+            padding: 20px;
+        }
+
+        form {
+            max-width: 400px;
+            margin: auto;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 16px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>Update Faculty</h1>
+    </header>
+
+    <div class="container">
+        <form method="post" action="{% if teacher_id %}{% url 'update_faculty' teacher_id %}{% endif %}">
+            {% csrf_token %}
+
+            <!-- Display current faculty details here as input fields -->
+            <label for="first_name">First Name:</label>
+            <input type="text" id="first_name" name="first_name" value="{{ first_name }}" required><br>
+
+            <!-- Repeat similar input fields for other details -->
+            <label for="last_name">Last Name:</label>
+            <input type="text" id="last_name" name="last_name" value="{{ last_name }}" required><br>
+
+            <label for="date_of_birth">Date of Birth:</label>
+            <input type="date" id="date_of_birth" name="date_of_birth" value="{{ dob }}" required><br>
+
+            <label for="gender">Gender:</label>
+            <select id="gender" name="gender" required>
+                <option value="Male" {% if gender == 'Male' %}selected{% endif %}>Male</option>
+                <option value="Female" {% if gender == 'Female' %}selected{% endif %}>Female</option>
+            </select><br>
+
+            <label for="contact_number">Contact Number:</label>
+            <input type="tel" id="contact_number" name="contact_number" value="{{ phone }}" required><br>
+
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" value="{{ email }}" required><br>
+
+            <label for="address">Address:</label>
+            <textarea id="address" name="address" required>{{ address }}</textarea><br>
+
+            <button type="submit">Update</button>
+        </form>
+    </div>
+
+</body>
+
+</html>

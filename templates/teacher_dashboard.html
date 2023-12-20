@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher Dashboard</title>
+    <!-- Add your CSS stylesheets or link to external stylesheets here -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+        }
+
+        nav {
+            background-color: #f0f0f0;
+            padding: 10px;
+        }
+
+        nav a {
+            margin-right: 15px;
+            text-decoration: none;
+            color: #333;
+        }
+
+        .dashboard-container {
+            display: flex;
+        }
+
+        .profile-container {
+            flex: 1;
+            padding: 20px;
+        }
+
+        .profile-image {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .profile-details {
+            margin-top: 10px;
+        }
+
+        .summary-container {
+            flex: 1;
+            padding: 20px;
+        }
+
+        .recent-activity {
+            margin-top: 20px;
+        }
+
+        .details-container {
+            flex: 1;
+            padding: 20px;
+        }
+
+        .update-details {
+            margin-top: 20px;
+        }
+
+        footer {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Teacher Dashboard</h1>
+</header>
+
+<nav>
+    <a href="#home">Home</a>
+    <a href="#profile">Profile</a>
+    <a href="#details">Details</a>
+    <!-- Add more navigation links as needed -->
+</nav>
+
+<div class="dashboard-container">
+    <div class="profile-container">
+        <h2>{{ first_name }}</h2>
+        <p>Email: {{ email }}</p>
+        <!-- Add more profile details as needed -->
+    </div>
+
+    <div class="summary-container">
+        <h2>Summary</h2>
+        <p>Total Documents: 15</p>
+        <p>Recent Activity:</p>
+        <ul class="recent-activity">
+            <li>Uploaded document "Project Report"</li>
+            <!-- Add more recent activities as needed -->
+        </ul>
+    </div>
+
+    <div class="details-container">
+        <h2>Details</h2>
+        <p>View detailed information about your profile, documents, and more.</p>
+        <a href="{% url 'view_teacher' teacher_id %}">View Information</a>
+        <a href="{% url 'update_teacher' teacher_id %}">Update Information</a>
+    </div>
+</div>
+
+<footer>
+    &copy; 2023 Teacher Dashboard
+</footer>
+
+</body>
+</html>
