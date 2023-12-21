@@ -27,7 +27,7 @@ urlpatterns = [
     path('manage_faculty/', views.manage_faculty, name='manage_faculty'),
     path('update_faculty/<int:faculty_id>',views.update_faculty, name='update_faculty'),
     path('delete_faculty/<int:faculty_id>',views.delete_faculty, name='delete_faculty'),
-    path('search_faculty/', views.search_faculty, name='search_faculty'),
+    path('update_faculty_idv/<int:faculty_id>',views.update_faculty_idv, name='update_faculty_idv'),
     path('reports/', views.report_view, name='report_generation'),
 
 

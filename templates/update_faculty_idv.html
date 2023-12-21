@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Teacher</title>
+</head>
+
+<body>
+    <h1>Update Teacher Details</h1>
+
+    <!-- Display Teacher Information -->
+    <h2>Teacher Information</h2>
+    <p>Teacher ID: {{ teacher.teacher_id }}</p>
+    <p>First Name: {{ teacher.first_name }}</p>
+    <p>Last Name: {{ teacher.last_name }}</p>
+    <!-- Add other fields as needed -->
+
+    <!-- Update Teacher Form -->
+    <h2>Update Teacher Details</h2>
+    <form method="post" action="{% url 'update_teacher' teacher_id=teacher.teacher_id %}">
+        {% csrf_token %}
+        <!-- Include form fields for updating teacher details -->
+        <label for="first_name">First Name:</label>
+        <input type="text" name="first_name" value="{{ teacher.first_name }}"><br>
+
+        <label for="last_name">Last Name:</label>
+        <input type="text" name="last_name" value="{{ teacher.last_name }}"><br>
+
+        <!-- Add other form fields as needed -->
+
+        <input type="submit" value="Update Teacher">
+    </form>
+
+    <!-- Display other details like teaching, paper, patent, etc. -->
+
+</body>
+
+</html>

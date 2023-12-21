@@ -129,3 +129,25 @@ CREATE TABLE Teaching (
         print(f"Error executing SQL query: {e}")
         
 # create_tables()
+        
+def alter_table_files():
+    raw_sql_query = """
+    -- Alter Certificate table to add FilePath column
+    ALTER TABLE Certificate
+    ADD COLUMN FilePath VARCHAR(255) NULL;
+
+    -- Alter EducationDetails table to add TranscriptPath column
+    ALTER TABLE EducationDetails
+    ADD COLUMN TranscriptPath VARCHAR(255) NULL;
+    """
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute(raw_sql_query)
+            if cursor.description:
+                data = cursor.fetchall()
+                print(data)
+                return data
+    except Exception as e:
+        print(f"Error executing SQL query: {e}")
+
+#alter_table_files()

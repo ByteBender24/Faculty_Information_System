@@ -65,6 +65,56 @@
             background-color: #f8f9fa;
         }
 
+        .address-cell {
+            max-width: 200px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            cursor: pointer;
+        }
+
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 200px;
+            background-color: #007bff;
+            color: #fff;
+            text-align: center;
+            border-radius: 5px;
+            padding: 5px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -100px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .modal-content {
+            padding: 20px;
+        }
+
+        .address-modal {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+
+        .modal-content {
+            max-height: calc(100vh - 100px); /* Adjust the max-height as needed */
+            overflow-y: auto;
+        }
+
         footer {
             background-color: #343a40;
             color: white;
@@ -73,6 +123,32 @@
             position: fixed;
             bottom: 0;
             width: 100%;
+        }
+
+        .filter-section {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .search-form {
+            display: flex;
+        }
+
+        .search-input {
+            width: 200px;
+        }
+
+        .filter-button {
+            background-color: #007bff;
+            color: white;
+            padding: 8px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .filter-button:hover {
+            background-color: #0056b3;
         }
     </style>
 </head>
@@ -90,6 +166,29 @@
     </nav>
 
     <div class="container">
+        <!-- Form for Search, Sort/Filter -->
+        <form class="filter-section" method="post" action="{% url 'manage_faculty' %}">
+            {% csrf_token %}
+            <div class="search-form">
+                <select class="form-control" id="search-category" name="search_category">
+                    <option value="id">Search by ID</option>
+                    <option value="name">Search by Name</option>
+                </select>
+                <input type="text" class="form-control search-input" name="search" placeholder="Enter ID or Name">
+                <button class="btn btn-primary ml-2" type="submit">Search</button>
+            </div>
+
+            <!-- Sort / Filter section -->
+            <div class="sort-filter-section">
+                <button class="filter-button" data-toggle="modal" data-target="#sortFilterModal" type="button">Sort / Filter</button>
+
+                <!-- Add hidden input fields to pass sort and filter values -->
+                <input type="hidden" name="sort" id="sort-input" value="">
+                <input type="hidden" name="filter" id="filter-input" value="">
+            </div>
+        </form>
+
+        <!-- Faculty Table -->
         <table class="table table-bordered">
             <thead class="thead-dark">
                 <tr>
@@ -105,22 +204,48 @@
                 </tr>
             </thead>
             <tbody>
-               {% for faculty in faculties %}
-                <tr>
-                    <td>{{ faculty.FacultyID }}</td>
-                    <td>{{ faculty.FirstName }}</td>
-                    <td>{{ faculty.LastName }}</td>
-                    <td>{{ faculty.DateOfBirth }}</td>
-                    <td>{{ faculty.Gender }}</td>
-                    <td>{{ faculty.ContactNumber }}</td>
-                    <td>{{ faculty.Email }}</td>
-                    <td>{{ faculty.Address }}</td>
-                    <td>
-                        <a href="{% url 'update_faculty' faculty.FacultyID%}">Update</a>
-                        <a href="{% url 'delete_faculty' faculty.FacultyID %}">Delete</a>
-                    </td>
-                </tr>
-            {% endfor %}
+                {% for faculty in faculties %}
+                    <tr>
+                        <td>{{ faculty.FacultyID }}</td>
+                        <td>{{ faculty.FirstName }}</td>
+                        <td>{{ faculty.LastName }}</td>
+                        <td>{{ faculty.DateOfBirth }}</td>
+                        <td>{{ faculty.Gender }}</td>
+                        <td>{{ faculty.ContactNumber }}</td>
+                        <td>{{ faculty.Email }}</td>
+                        <td class="address-cell">
+                            <div class="tooltip">
+                                <button class="btn btn-link" data-toggle="modal" data-target="#addressModal{{ faculty.FacultyID }}">Show Address</button>
+                                <span class="tooltiptext">{{ faculty.Address }}</span>
+                            </div>
+
+                            <!-- Modal for Address -->
+                            <div class="modal fade" id="addressModal{{ faculty.FacultyID }}" tabindex="-1" role="dialog"
+                                aria-labelledby="addressModalLabel{{ faculty.FacultyID }}" aria-hidden="true">
+                                <div class="modal-dialog address-modal" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="addressModalLabel{{ faculty.FacultyID }}">Address</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            {{ faculty.Address }}
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <a href="{% url 'update_faculty' faculty.FacultyID %}">Update</a>
+                            <a href="{% url 'delete_faculty' faculty.FacultyID %}">Delete</a>
+                        </td>
+                    </tr>
+                {% endfor %}
             </tbody>
         </table>
     </div>
@@ -133,6 +258,94 @@
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+    <!-- Modal for Sort / Filter -->
+    <div class="modal fade" id="sortFilterModal" tabindex="-1" role="dialog" aria-labelledby="sortFilterModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="sortFilterModalLabel">Sort / Filter</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <label for="sort-dropdown">Sort by:</label>
+                    <select class="form-control" id="sort-dropdown" name="sort">
+                        <option value="FacultyID">ID</option>
+                        <option value="FirstName">First Name</option>
+                        <option value="LastName">Last Name</option>
+                        <option value="date_of_birth">Date of Birth</option>
+
+                        <!-- Add more sorting options as needed -->
+                    </select>
+
+                    <label for="filter-dropdown">Filter by:</label>
+                    <select class="form-control" id="filter-dropdown" name="filter">
+                        <option value="">No Filter</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <!-- Add more filtering options as needed -->
+                    </select>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="applySortFilter()">Apply</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Function to apply selected sort and filter options
+        function applySortFilter() {
+            var sortValue = document.getElementById('sort-dropdown').value;
+            var filterValue = document.getElementById('filter-dropdown').value;
+
+            // Set values to the hidden inputs in the main form
+            document.getElementById('sort-input').value = sortValue;
+            document.getElementById('filter-input').value = filterValue;
+
+            // Submit the main form
+            document.forms[0].submit();
+        }
+
+        // Function to dynamically change the placeholder and name of the search input
+        document.getElementById('search-category').addEventListener('change', function () {
+            var searchCategory = this.value;
+            var searchInput = document.querySelector('.search-input');
+
+            if (searchCategory === 'id') {
+                searchInput.placeholder = 'Enter ID';
+                searchInput.name = 'search_id';
+            } else if (searchCategory === 'name') {
+                searchInput.placeholder = 'Enter Name';
+                searchInput.name = 'search_name';
+            }
+        });
+
+        // Adjust the modal size based on the address text length
+        document.addEventListener('DOMContentLoaded', function () {
+            var addressModals = document.querySelectorAll('.address-modal');
+
+            addressModals.forEach(function (modal) {
+                modal.addEventListener('show.bs.modal', function () {
+                    var addressText = modal.querySelector('.modal-body').textContent;
+                    var modalContent = modal.querySelector('.modal-content');
+
+                    // Set a base height for the modal content
+                    modalContent.style.height = '200px'; // Adjust as needed
+
+                    // Calculate the height of the address text
+                    var addressTextHeight = modalContent.scrollHeight;
+
+                    // Set the modal content height
+                    modalContent.style.height = addressTextHeight + 'px';
+                });
+            });
+        });
+    </script>
 
 </body>
 
