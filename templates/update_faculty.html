@@ -98,7 +98,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="date_of_birth" class="form-label">Date of Birth</label>
-                        <input type="date" class="form-control" id="date_of_birth" name="date_of_birth" value="{{ dob }}" required>
+                        <input type="date" class="form-control" id="date_of_birth" name="date_of_birth" value="{{ dob|date:'Y-m-d' }}" required>
                     </div>
                     <div class="mb-3">
                         <label for="gender" class="form-label">Gender</label>

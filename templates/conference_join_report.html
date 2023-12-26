@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conference Report</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <style>
+        @media print {
+            /* Hide the "Show Locations" buttons when printing */
+            .show-locations-button {
+                display: none;
+            }
+            /* Hide the print button when printing */
+            .print-button {
+                display: none;
+            }
+        }
+
+        /* Add additional styling for better print layout if needed */
+        @media print {
+            /* Additional print styles */
+        }
+    </style>
+</head>
+<body class="bg-dark text-light">
+
+<!-- Bootstrap Navigation Bar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="#">Conference Report</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+            <!-- Add navigation links if needed -->
+        </ul>
+    </div>
+</nav>
+
+<div class="container mt-4">
+    <h2 class="text-light">Conference Report</h2>
+    <table class="table table-dark table-hover">
+        <thead>
+        <tr>
+            <th>Faculty ID</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Conference Count</th>
+            <th>Conference Locations</th>
+        </tr>
+        </thead>
+        <tbody id="conferenceTableBody">
+        <!-- Data will be inserted here using JavaScript -->
+        </tbody>
+    </table>
+</div>
+
+<!-- Modal for Conference Locations -->
+<div class="modal" id="conferenceLocationsModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content bg-dark text-light">
+            <div class="modal-header">
+                <h5 class="modal-title">Conference Locations</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-dark">
+                    <thead>
+                    <tr>
+                        <th>Conference Name</th>
+                        <th>Location</th>
+                    </tr>
+                    </thead>
+                    <tbody id="modalBody">
+                    <!-- Data will be inserted here using JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Print Button -->
+<div class="text-center mb-4">
+    <button class="btn btn-primary print-button" onclick="printReport()">Print Report</button>
+</div>
+
+<!-- Bootstrap Footer -->
+<footer class="fixed-bottom bg-dark text-light text-center p-3">
+    <p>© 2023 Your Company. All rights reserved.</p>
+</footer>
+<script>
+    // Replace this with your actual data
+    var conferenceReport = {{ conference_report|safe }};
+    console.log('Conference Report:', conferenceReport);
+
+    // Display the conference report table
+    var tableBody = document.getElementById('conferenceTableBody');
+    conferenceReport.forEach(function (row) {
+        console.log('Row:', row);
+        var newRow = tableBody.insertRow(tableBody.rows.length);
+        for (var key in row) {
+            var cell = newRow.insertCell();
+            cell.innerHTML = row[key];
+        }
+        // Add a button to open the modal for each row
+        var buttonCell = newRow.insertCell();
+        var button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'btn btn-primary show-locations-button';
+        button.innerHTML = 'Show Locations';
+        button.setAttribute('data-toggle', 'modal');
+        button.setAttribute('data-target', '#conferenceLocationsModal');
+        button.onclick = function () {
+            showConferenceLocations(row.ConferenceLocations, row.FacultyID);
+        };
+        buttonCell.appendChild(button);
+    });
+
+    // Function to show conference locations in the modal
+    function showConferenceLocations(locations, facultyID) {
+        console.log('Locations:', locations);
+        console.log('FacultyID:', facultyID);
+
+        var modalBody = document.getElementById('modalBody');
+        modalBody.innerHTML = '';  // Clear previous data
+
+        // Replace this with your actual data
+        console.log("Raw JSON String:", '{{ conference_locations|safe }}');
+        var conferenceLocationsRaw = '{{ conference_locations|safe }}';
+        var conferenceLocations = JSON.parse(conferenceLocationsRaw.replace(/&quot;/g, '"'));
+        console.log("Parsed JSON:", conferenceLocations);
+
+        var locationArray = locations.split(',');
+        locationArray.forEach(function (location) {
+            var newRow = modalBody.insertRow(modalBody.rows.length);
+            var cell1 = newRow.insertCell(0);
+            var cell2 = newRow.insertCell(1);
+            cell1.innerHTML = 'Conference Name';  // Replace with actual conference name
+            cell2.innerHTML = location;
+
+            // Search for the corresponding conference name based on facultyID
+            var conferenceName = getConferenceName(conferenceLocations, location);
+            cell1.innerHTML = conferenceName;
+        });
+    }
+
+    // Function to get conference name based on location
+    function getConferenceName(conferenceLocations, location) {
+        var conference = conferenceLocations.find(function (item) {
+            return item.Location === location;
+        });
+
+        if (conference) {
+            return conference.ConferenceName;
+        } else {
+            return 'N/A';  // Replace with a default value if not found
+        }
+    }
+
+    // Function to trigger print action
+    function printReport() {
+        window.print();
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Department Report</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.css">
+    <style>
+        body {
+            background-color: #343a40; /* Dark background color */
+            color: #fff; /* Light text color */
+        }
+
+        .container {
+            margin-top: 20px;
+        }
+
+        th,
+        td {
+            color: #fff; /* Light text color for table */
+        }
+
+        .navbar {
+            background-color: #212529; /* Dark navbar background color */
+        }
+
+        .navbar-dark .navbar-toggler-icon {
+            background-color: #fff; /* Light color for the toggler icon */
+        }
+
+        #sidebar {
+            height: 100%;
+            width: 0;
+            position: fixed;
+            z-index: 1;
+            top: 0;
+            left: 0;
+            background-color: #111;
+            overflow-x: hidden;
+            transition: 0.5s;
+            padding-top: 60px;
+        }
+
+        #sidebar a {
+            padding: 8px 8px 8px 32px;
+            text-decoration: none;
+            font-size: 18px;
+            color: #818181;
+            display: block;
+            transition: 0.3s;
+        }
+
+        #sidebar a:hover {
+            color: #f1f1f1;
+        }
+
+        #sidebar .close-btn {
+            position: absolute;
+            top: 0;
+            right: 25px;
+            font-size: 36px;
+            margin-left: 50px;
+        }
+
+        @media screen and (max-height: 450px) {
+            #sidebar {
+                padding-top: 15px;
+            }
+
+            #sidebar a {
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Link</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Link</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Link</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Sidebar -->
+    <div id="sidebar">
+        <a href="javascript:void(0)" class="close-btn" onclick="closeNav()">×</a>
+        <a href="#">Section 1</a>
+        <a href="#">Section 2</a>
+        <a href="#">Section 3</a>
+        <a href="#">Section 4</a>
+    </div>
+
+    <div class="container mt-4">
+        <!-- Sidebar Toggle Button -->
+        <button class="btn btn-light" onclick="openNav()">☰ Open Sidebar</button>
+
+        <!-- Search input for department -->
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="dept">Search by Department:</label>
+                <input type="text" class="form-control" id="dept" name="dept">
+            </div>
+            <button type="submit" class="btn btn-primary">Search</button>
+        </form>
+
+        <!-- Table for all people data -->
+        <h4 class="mt-4">All People Data</h4>
+        <table class="table table-bordered table-dark table-hover">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Department</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for person in all_people_data %}
+                <tr>
+                    <td>{{ person.FacultyID }}</td>
+                    <td>{{ person.FULL_NAME }}</td>
+                    <td>{{ person.Department }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- Table for department data -->
+        <h4 class="mt-4">Department Data</h4>
+        <table class="table table-bordered table-dark table-hover">
+            <thead>
+                <tr>
+                    <th>Department</th>
+                    <th>Faculty Count</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for dept in department_data %}
+                <tr>
+                    <td>{{ dept.Department }}</td>
+                    <td>{{ dept.Faculty_Count }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- Table for average experience data -->
+        <h4 class="mt-4">Average Experience Data</h4>
+        <table class="table table-bordered table-dark table-hover">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Average Experience</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for person in avg_experience_data %}
+                <tr>
+                    <td>{{ person.FacultyID }}</td>
+                    <td>{{ person.FULL_NAME }}</td>
+                    <td>{{ person.avg_experience }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Custom JavaScript for charts -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        function openNav() {
+            document.getElementById("sidebar").style.width = "250px";
+        }
+
+        function closeNav() {
+            document.getElementById("sidebar").style.width = "0";
+        }
+    </script>
+
+    <!-- Chart.js script -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
+    <script>
+        var departmentData = {{ department_data|safe }};
+        console.log('Department Data:', departmentData);
+
+        var labels = Object.keys(departmentData);
+        var data = Object.values(departmentData);
+
+        var ctxPie = document.getElementById('departmentPieChart').getContext('2d');
+        var departmentPieChart = new Chart(ctxPie, {
+            type: 'pie',
+            data: {
+                labels: labels,
+                datasets: [{
+                    data: data,
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.5)',
+                        'rgba(54, 162, 235, 0.5)',
+                        'rgba(255, 206, 86, 0.5)',
+                        'rgba(75, 192, 192, 0.5)',
+                        'rgba(153, 102, 255, 0.5)',
+                        'rgba(255, 159, 64, 0.5)'
+                    ]
+                }]
+            }
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Add Details</title>
+    <!-- Add Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            display: flex;
+            flex-direction: row;
+            min-height: 100vh;
+        }
+
+        main {
+            flex: 1;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+        }
+
+        form {
+            max-width: 600px;
+            margin: auto;
+        }
+
+        .card {
+            margin-bottom: 20px;
+        }
+
+        #dashboard1 {
+            margin-bottom: 30px;
+            margin-top: 20px;
+        }
+
+        .sidebar {
+            background-color: #f8f9fa;
+            padding: 20px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 200px;
+            height: 100%;
+            overflow: auto;
+            border-right: 1px solid #dee2e6;
+        }
+
+        .sidebar a {
+            display: block;
+            padding: 10px;
+            margin-bottom: 10px;
+            text-decoration: none;
+            color: #007bff;
+            font-weight: bold;
+        }
+
+        .sidebar a#dashboard1 {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        .sidebar a:hover {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        footer {
+            background-color: #f8f9fa;
+            padding: 10px;
+            margin-top: auto;
+        }
+
+        #sidebar {
+            width: 200px;
+            padding: 20px;
+            background-color: #f8f9fa;
+            position: fixed;
+            height: 100%;
+            overflow-y: auto;
+        }
+
+        #main-content {
+            flex-grow: 1;
+            margin-left: 200px;
+            /* Set this to the width of the sidebar */
+        }
+
+        main {
+            position: relative;
+            left: 170px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="sidebar" id="sidebar">
+        <a href="#educationdetails">Education Details</a>
+        <a href="#certificate">Certificates Details</a>
+        <a href="#patent">Patent Details</a>
+        <a href="#paper">Paper Details</a>
+        <a href="#workexperience">Work Experience Details</a>
+        <a href="#conference">Conference Details</a>
+        <a class="btn btn-primary" id="dashboard1" href="{% url 'teacher_dashboard' teacher.teacher_id %}">Back to
+            Dashboard</a>
+    </div>
+
+    <main>
+        <div class="container">
+            <form method="POST" action="{% url 'add_education_details' teacher.teacher_id %}">
+                {% csrf_token %}
+                <!-- Education Details -->
+                <div class="card" id="educationdetails">
+                    <div class="card-header">
+                        <h2>Education Details</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label for="degree" class="form-label">Degree</label>
+                            <input type="text" class="form-control" id="degree" name="degree" />
+                        </div>
+                        <div class="mb-3">
+                            <label for="major" class="form-label">Major</label>
+                            <input type="text" class="form-control" id="major" name="major" />
+                        </div>
+                        <div class="mb-3">
+                            <label for="university" class="form-label">University</label>
+                            <input type="text" class="form-control" id="university" name="university" />
+                        </div>
+                        <div class="mb-3">
+                            <label for="yearOfPassing" class="form-label">Year of Passing</label>
+                            <input type="text" class="form-control" id="yearOfPassing" name="yearOfPassing" />
+                        </div>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-secondary">Submit</button>
+            </form>
+            <form method="POST" action="{% url 'add_certificate_details' teacher.teacher_id %}">
+                {% csrf_token %}
+                <!-- Certificates Details -->
+                <div class="card" id="certificate">
+                    <div class="card-header">
+                        <h2>Certificates Details</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label for="certificateName" class="form-label">Certificate Name</label>
+                            <input type="text" class="form-control" id="certificateName" name="certificateName" />
+                        </div>
+                        <div class="mb-3">
+                            <label for="issuingAuthority" class="form-label">Issuing Authority</label>
+                            <input type="text" class="form-control" id="issuingAuthority" name="issuingAuthority" />
+                        </div>
+                        <div class="mb-3">
+                            <label for="issueDate" class="form-label">Issue Date</label>
+                            <input type="date" class="form-control" id="issueDate" name="issueDate" />
+                        </div>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-secondary">Submit</button>
+            </form>
+            <form method="POST" action="{% url 'add_patent_details' teacher.teacher_id %}">
+                {% csrf_token %}
+                <!-- Patent Details -->
+                <div class="card" id="patent">
+                    <div class="card-header">
+                        <h2>Patent Details</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label for="title" class="form-label">Title</label>
+                            <input type="text" class="form-control" id="title" name="title" />
+                        </div>
+                        <div class="mb-3">
+                            <label for="patentNumber" class="form-label">Patent Number</label>
+                            <input type="text" class="form-control" id="patentNumber" name="patentNumber" />
+                        </div>
+                        <div class="mb-3">
+                            <label for="dateIssued" class="form-label">Date Issued</label>
+                            <input type="date" class="form-control" id="dateIssued" name="dateIssued" />
+                        </div>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-secondary">Submit</button>
+            </form>
+            <form method="POST" action="{% url 'add_paper_details' teacher.teacher_id %}">
+                {% csrf_token %}
+                <!-- Paper Details -->
+                <div class="card" id="paper">
+                    <div class="card-header">
+                        <h2>Paper Details</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label for="paperTitle" class="form-label">Paper Title</label>
+                            <input type="text" class="form-control" id="paperTitle" name="paperTitle" />
+                        </div>
+                        <div class="mb-3">
+                            <label for="journal" class="form-label">Journal</label>
+                            <input type="text" class="form-control" id="journal" name="journal" />
+                        </div>
+                        <div class="mb-3">
+                            <label for="publicationDate" class="form-label">Publication Date</label>
+                            <input type="date" class="form-control" id="publicationDate" name="publicationDate" />
+                        </div>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-secondary">Submit</button>
+            </form>
+            <form method="POST" action="{% url 'add_work_exp_details' teacher.teacher_id %}">
+                {% csrf_token %}
+                <!-- Work Experience Details -->
+                <div class="card" id="workexperience">
+                    <div class="card-header">
+                        <h2>Work Experience Details</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label for="organization" class="form-label">Organization</label>
+                            <input type="text" class="form-control" id="organization" name="organization" />
+                        </div>
+                        <div class="mb-3">
+                            <label for="position" class="form-label">Position</label>
+                            <input type="text" class="form-control" id="position" name="position" />
+                        </div>
+                        <div class="mb-3">
+                            <label for="experience" class="form-label">Experience</label>
+                            <input type="number" class="form-control" id="experience" name="experience" />
+                        </div>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-secondary">Submit</button>
+            </form>
+            <form method="POST" action="{% url 'add_conference_details' teacher.teacher_id %}">
+                {% csrf_token %}
+                <!-- Conference Details -->
+                <div class="card" id="conference">
+                    <div class="card-header">
+                        <h2>Conference Details</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label for="conferenceName" class="form-label">Conference Name</label>
+                            <input type="text" class="form-control" id="conferenceName" name="conferenceName" />
+                        </div>
+                        <div class="mb-3">
+                            <label for="location" class="form-label">Location</label>
+                            <input type="text" class="form-control" id="location" name="location" />
+                        </div>
+                        <div class="mb-3">
+                            <label for="date" class="form-label">Date</label>
+                            <input type="date" class="form-control" id="date" name="date" />
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-secondary">Submit</button>
+            </form>
+
+            <!-- Back to Dashboard Button -->
+            <a class="btn btn-primary" href="{% url 'teacher_dashboard' teacher.teacher_id %}">Back to Dashboard</a>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2023 Your University</p>
+    </footer>
+
+    <!-- Include Bootstrap JS and Popper.js -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

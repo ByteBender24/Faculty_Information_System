@@ -101,7 +101,7 @@
                         <p><strong>Department:</strong> {{ course.department }}</p>
                         <p><strong>Position:</strong> {{ course.position }}</p>
                         <p><strong>Leaves Taken:</strong> {{ course.leavesTaken }}</p>
-                        <p><strong>Leaves Allotted:</strong> {{ course.LeavesAllotted }}</p>
+                        <p><strong>Leaves Allotted:</strong> {{ course.LeavesAlloted }}</p>
                         <!-- Add Delete and Update buttons for Teaching -->
                         <div class="delete-update-buttons">
                             
@@ -335,12 +335,8 @@
                         <input type="text" class="form-control" id="position" name="position" value="{{ exp_info.position }}" readonly>
                     </div>
                     <div class="mb-3">
-                        <label for="start_date">Start Date:</label>
-                        <input type="text" class="form-control" id="start_date" name="start_date" value="{{ exp_info.startdate }}" readonly>
-                    </div>
-                    <div class="mb-3">
-                        <label for="end_date">End Date:</label>
-                        <input type="text" class="form-control" id="end_date" name="end_date" value="{{ exp_info.enddate }}" readonly>
+                        <label for="experience">Experience:</label>
+                        <input type="number" class="form-control" id="experience" name="experience" value="{{ exp_info.experience }}" readonly>
                     </div>
                 </div>
             </form>

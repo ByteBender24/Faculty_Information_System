@@ -42,8 +42,7 @@ CREATE TABLE WorkExperience (
     FacultyID INT,
     Organization VARCHAR(100),
     Position VARCHAR(50),
-    StartDate DATE,
-    EndDate DATE,
+    Experience INT,
     FOREIGN KEY (FacultyID) REFERENCES Faculty(FacultyID)
 );
 
@@ -79,11 +78,12 @@ CREATE TABLE Patent (
 
 -- Create Conference table
 CREATE TABLE Conference (
-    ConferenceID INT PRIMARY KEY,
+    ConferenceID INT,
     FacultyID INT,
     ConferenceName VARCHAR(100),
     Location VARCHAR(50),
     DateAttended DATE,
+    PRIMARY KEY (ConferenceID, FacultyID),
     FOREIGN KEY (FacultyID) REFERENCES Faculty(FacultyID)
 );
 
@@ -134,12 +134,7 @@ def alter_table_files():
     raw_sql_query = """
     -- Alter Certificate table to add FilePath column
     ALTER TABLE Certificate
-    ADD COLUMN FilePath VARCHAR(255) NULL;
-
-    -- Alter EducationDetails table to add TranscriptPath column
-    ALTER TABLE EducationDetails
-    ADD COLUMN TranscriptPath VARCHAR(255) NULL;
-    """
+    ADD COLUMN FilePath VARCHAR(255) NULL;"""
     try:
         with connection.cursor() as cursor:
             cursor.execute(raw_sql_query)
@@ -151,3 +146,4 @@ def alter_table_files():
         print(f"Error executing SQL query: {e}")
 
 #alter_table_files()
+ 
