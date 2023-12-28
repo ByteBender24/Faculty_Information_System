@@ -1,3 +1,6 @@
+{% load static %}
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -7,6 +10,9 @@
     <title>Add Details</title>
     <!-- Add Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+    <link rel="icon" href="{% static 'img/icon.png' %}">
+    
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -18,6 +24,7 @@
 
         main {
             flex: 1;
+            padding-right: 200px;
         }
 
         h2 {
@@ -34,40 +41,13 @@
         }
 
         #dashboard1 {
-            margin-bottom: 30px;
-            margin-top: 20px;
-        }
-
-        .sidebar {
-            background-color: #f8f9fa;
-            padding: 20px;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 200px;
-            height: 100%;
-            overflow: auto;
-            border-right: 1px solid #dee2e6;
-        }
-
-        .sidebar a {
-            display: block;
-            padding: 10px;
             margin-bottom: 10px;
-            text-decoration: none;
-            color: #007bff;
-            font-weight: bold;
+            margin-top: 10px;
+            color: white;
+            height: fit-content;
+            align-items: center;
         }
 
-        .sidebar a#dashboard1 {
-            background-color: #007bff;
-            color: #fff;
-        }
-
-        .sidebar a:hover {
-            background-color: #007bff;
-            color: #fff;
-        }
 
         footer {
             background-color: #f8f9fa;
@@ -75,14 +55,6 @@
             margin-top: auto;
         }
 
-        #sidebar {
-            width: 200px;
-            padding: 20px;
-            background-color: #f8f9fa;
-            position: fixed;
-            height: 100%;
-            overflow-y: auto;
-        }
 
         #main-content {
             flex-grow: 1;
@@ -94,21 +66,83 @@
             position: relative;
             left: 170px;
         }
+
+        #sidebar {
+            height: 100%;
+            width: 0;
+            position: fixed;
+            z-index: 1;
+            top: 0;
+            left: 0;
+            background-color: #111;
+            overflow-x: hidden;
+            transition: 0.5s;
+            padding-top: 60px;
+        }
+
+        #sidebar a {
+            padding: 8px 8px 8px 32px;
+            text-decoration: none;
+            font-size: 18px;
+            color: #818181;
+            display: block;
+            transition: 0.3s;
+        }
+
+        #sidebar a:hover {
+            color: #f1f1f1;
+        }
+
+        #sidebar .close-btn {
+            position: absolute;
+            top: 0;
+            right: 25px;
+            font-size: 36px;
+            margin-left: 50px;
+        }
+
+        @media screen and (max-height: 450px) {
+            #sidebar {
+                padding-top: 15px;
+            }
+
+            #sidebar a {
+                font-size: 18px;
+            }
+        }
+
+        #open_sidebar_btn {
+            height: fit-content;
+            width: fit-content;
+        }
+
+        body {
+    background-image: url("/static/img/img6.jpg");
+
+  height: 100%;
+
+  background-position: center;
+    background-repeat: no-repeat;
+  background-size: cover;
+}
     </style>
 </head>
 
 <body>
     <div class="sidebar" id="sidebar">
+        <a href="javascript:void(0)" class="close-btn" onclick="closeNav()"><i
+                class="fa-regular fa-circle-xmark"></i></a>
         <a href="#educationdetails">Education Details</a>
         <a href="#certificate">Certificates Details</a>
         <a href="#patent">Patent Details</a>
         <a href="#paper">Paper Details</a>
         <a href="#workexperience">Work Experience Details</a>
         <a href="#conference">Conference Details</a>
-        <a class="btn btn-primary" id="dashboard1" href="{% url 'teacher_dashboard' teacher.teacher_id %}">Back to
+        <a class="btn btn-primary" id="dashboard1" style="color: white;" href="{% url 'teacher_dashboard' teacher.teacher_id %}">Back to
             Dashboard</a>
     </div>
 
+    <button class="btn btn-secondary" id="open_sidebar_btn" onclick="openNav()">☰ Open Sidebar</button>
     <main>
         <div class="container">
             <form method="POST" action="{% url 'add_education_details' teacher.teacher_id %}">
@@ -273,6 +307,15 @@
 
     <!-- Include Bootstrap JS and Popper.js -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function openNav() {
+            document.getElementById("sidebar").style.width = "250px";
+        }
+
+        function closeNav() {
+            document.getElementById("sidebar").style.width = "0";
+        }
+    </script>
 </body>
 
 </html>

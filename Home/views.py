@@ -256,6 +256,7 @@ def login(request):
 
         elif any((username == faculty_user[1] and password == faculty_user[2]) for faculty_user in faculty_credentials):
             faculty_id = get_faculty_id(username)[0]
+            request.session['faculty_id'] = faculty_id
             return redirect(f'teacher/{faculty_id}')
 
 

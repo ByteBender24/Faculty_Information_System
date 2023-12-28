@@ -127,9 +127,10 @@ CREATE TABLE Teaching (
                 return data
     except Exception as e:
         print(f"Error executing SQL query: {e}")
-        
+
 # create_tables()
-        
+
+
 def alter_table_files():
     raw_sql_query = """
     -- Alter Certificate table to add FilePath column
@@ -145,5 +146,104 @@ def alter_table_files():
     except Exception as e:
         print(f"Error executing SQL query: {e}")
 
-#alter_table_files()
- 
+# alter_table_files()
+
+
+def triggers_functions_PLSQL():
+    raw_sql_query = """
+    DROP FUNCTION IF EXISTS generate_username;
+DROP FUNCTION IF EXISTS generate_password;
+
+-- Drop the triggers
+DROP TRIGGER IF EXISTS faculty_insert_trigger;
+DROP TRIGGER IF EXISTS faculty_delete_trigger;
+
+
+DELIMITER //
+
+CREATE FUNCTION generate_username(first_name VARCHAR(255), last_name VARCHAR(255))
+RETURNS VARCHAR(50)
+DETERMINISTIC
+BEGIN
+    DECLARE new_username VARCHAR(50);
+    -- Logic to generate a unique username (customize as needed)
+    SET new_username = LOWER(CONCAT(SUBSTRING(first_name, 1, 1), last_name, SUBSTRING(MD5(RAND()), 1, 4)));
+    RETURN new_username;
+END //
+DELIMITER ;
+
+DELIMITER //
+CREATE FUNCTION generate_password()
+RETURNS VARCHAR(20)
+DETERMINISTIC
+BEGIN
+    DECLARE new_password VARCHAR(20);
+    -- Logic to generate a random password (customize as needed)
+    SET new_password = SUBSTRING(MD5(RAND()), 1, 8);
+    RETURN new_password;
+END //
+
+DELIMITER ;
+
+
+-- Create a trigger to generate credentials on faculty insertion
+DELIMITER //
+CREATE TRIGGER faculty_insert_trigger AFTER INSERT ON faculty
+FOR EACH ROW
+BEGIN
+    DECLARE new_username VARCHAR(50);
+    DECLARE new_password VARCHAR(20);
+    -- Generate username and password
+    SET new_username = generate_username(NEW.FirstName, NEW.LastName);
+    SET new_password = generate_password();
+    -- Insert into credentials table
+    INSERT INTO credential (username, passwordHash, FacultyID)
+    VALUES (new_username, new_password, NEW.FacultyID);
+    END //
+    DELIMITER ;
+
+    -- Create a trigger to remove credentials on faculty deletion
+DELIMITER //
+CREATE TRIGGER faculty_delete_trigger AFTER DELETE ON faculty
+FOR EACH ROW
+BEGIN
+    -- Delete from credentials table based on FacultyID
+    DELETE FROM credential WHERE FacultyID = OLD.FacultyID;
+END //
+DELIMITER ;
+"""
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute(raw_sql_query)
+            if cursor.description:
+                data = cursor.fetchall()
+                print(data)
+                return data
+    except Exception as e:
+        print(f"Error executing SQL query: {e}")
+
+
+# triggers_functions_PLSQL()
+        
+
+
+def example_run_plsql():
+    raw_sql_query = """
+    INSERT INTO faculty (FacultyID, FirstName, LastName, Gender) VALUES (2443, 'John', 'Doe', 'Male');
+
+-- Check if a corresponding record is inserted into the credentials table
+SELECT * FROM credential WHERE FacultyID = 2443;
+-- Expected Output: Should display a record with the generated username and password for the inserted faculty
+
+-- Clean up
+DELETE FROM faculty WHERE FacultyID = 2443;
+"""
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute(raw_sql_query)
+            if cursor.description:
+                data = cursor.fetchall()
+                print(data)
+                return data
+    except Exception as e:
+        print(f"Error executing SQL query: {e}")

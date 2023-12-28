@@ -1,3 +1,5 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -7,6 +9,8 @@
     <title>Department Report</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.css">
+    <link rel="icon" href="{% static 'img/icon.png' %}">
+
     <style>
         body {
             background-color: #343a40; /* Dark background color */
@@ -104,7 +108,7 @@
 
     <!-- Sidebar -->
     <div id="sidebar">
-        <a href="javascript:void(0)" class="close-btn" onclick="closeNav()">×</a>
+        <a href="javascript:void(0)" class="close-btn" onclick="closeNav()">x</a>
         <a href="#">Section 1</a>
         <a href="#">Section 2</a>
         <a href="#">Section 3</a>

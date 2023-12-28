@@ -1,3 +1,5 @@
+{% load static %}
+
 <!-- manage_faculty.html -->
 
 <!DOCTYPE html>
@@ -9,6 +11,8 @@
     <title>Manage Faculty</title>
     <!-- Add Bootstrap CSS link -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="icon" href="{% static 'img/icon.png' %}">
+
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -150,6 +154,16 @@
         .filter-button:hover {
             background-color: #0056b3;
         }
+
+        body {
+    background-image: url("/static/img/img6.jpg");
+
+  height: 100%;
+
+  background-position: center;
+    background-repeat: no-repeat;
+  background-size: cover;
+}
     </style>
 </head>
 

@@ -1,3 +1,6 @@
 # .gitattributes
 Pipfile eol=lf
 Pipfile.lock eol=lf
+
+staticfile eol=lf
+staticfile eol=lf
