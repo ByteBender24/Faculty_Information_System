@@ -51,5 +51,7 @@ urlpatterns = [
     path('report_conference_1/', views.conference_join_report, name="conference_join_report"),
     path('report_department_1/', views.department_join_report,name="department_join_report"),
     path('report_generation/', views.report_generation, name='report_generation'),
-
-]
+    path('csv_data_collection/', views.csv_data_collection, name='csv_data_collection'),
+    path('download_csv_page/', views.download_csv_page, name='download_csv'),
+    path('generate-csv/', views.generate_csv, name='generate_csv'),
+]   

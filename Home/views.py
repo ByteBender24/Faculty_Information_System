@@ -1,9 +1,12 @@
 from django.shortcuts import render
+from django.http import HttpResponse
+import csv
+from io import StringIO
 import json
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.db import connection
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from .models import create_tables
 from django.contrib import messages
 from colorcode import Color, print_colored
@@ -45,7 +48,7 @@ def return_admin():
         print(f"Error executing SQL query: {e}")
 
 
-def return_faculty():
+def return_faculty_credential():
     raw_sql_query = """
     SELECT * FROM credential;
     """
@@ -246,17 +249,19 @@ def login(request):
         password = request.POST.get('password')
 
         admin_credentials = return_admin()
-        faculty_credentials = return_faculty()
+        faculty_credentials = return_faculty_credential()
 
+        print_colored(faculty_credentials, color=Color.GREEN)
         if any((username == admin_user[1] and password == admin_user[2]) for admin_user in admin_credentials):
             admin_id = get_admin_id(username)[0]
             request.session['admin_id'] = admin_id
             return redirect(f'adminfis/{admin_id}')
 
-
+        
         elif any((username == faculty_user[1] and password == faculty_user[2]) for faculty_user in faculty_credentials):
             faculty_id = get_faculty_id(username)[0]
             request.session['faculty_id'] = faculty_id
+            print_colored(faculty_id)
             return redirect(f'teacher/{faculty_id}')
 
 
@@ -664,12 +669,14 @@ def update_teacher(request, teacher_id):
 #-------------------------------------------------------------------------admin home and add faculty-----------------------------------------------------------------------------------------------------------
 def admin_home(request, admin_id):
     context = get_admin_details(admin_id)
-
+    admin_id_login = request.session.get('admin_id')
+    print_colored(admin_id_login)
     return render(request, 'admin_home.html', context)
 
 
 def add_faculty(request, admin_id):
     admin_id_login = request.session.get('admin_id')
+    print_colored(admin_id_login)
     if request.method == "GET":
         return render(request, 'add_faculty.html', {'admin_id': admin_id, 'admin_id_login' : admin_id_login})
     if request.method == "POST":
@@ -693,7 +700,7 @@ def add_faculty(request, admin_id):
 def manage_faculty(request):
     sort = None
     admin_id_login = request.session.get('admin_id')
-
+    print_colored(admin_id_login)
     if request.method == "GET":
         faculties = get_all_faculties(sort)
         return render(request, 'manage_faculty.html', {'faculties': faculties, 'admin_id_login' : admin_id_login})
@@ -724,7 +731,7 @@ def manage_faculty(request):
                 else:
                     gender = request.POST.get('filter')
                     faculties = get_faculty_by_gender(gender, sort)
-        return render(request, 'manage_faculty.html', {'faculties': faculties})
+        return render(request, 'manage_faculty.html', {'faculties': faculties, 'admin_id_login': admin_id_login})
 
 
 def update_faculty(request, faculty_id):
@@ -1319,3 +1326,101 @@ def conference_join_report(request):
     conference_locations_json = json.dumps(data2)
     return render(request, 'conference_join_report.html', {'conference_report': data, 'conference_locations': conference_locations_json})
 
+# -------------------------------------------------------------------CSV files reader and uploader-----------------------------------------------------------
+
+
+def insert_faculty_data(file_content, file_format):
+    try:
+        if file_format.lower() != 'csv':
+            print("Unsupported file format. Please provide a CSV file.")
+            return
+
+        # Convert bytes to string
+        content_str = file_content.decode('utf-8')
+
+        # Read data from CSV file
+        csv_reader = csv.DictReader(StringIO(content_str))
+
+        with connection.cursor() as cursor:
+            # Prepare SQL query for insertion
+            sql_query = "INSERT INTO Faculty (FacultyID, FirstName, LastName, DateOfBirth, Gender, ContactNumber, Email, Address) VALUES "
+
+            # Iterate over rows in the data and append values to the SQL query
+            for row in csv_reader:
+                values = f"({row['FacultyID']}, '{row['FirstName']}', '{row['LastName']}', '{row['DateOfBirth']}', '{row['Gender']}', '{row['ContactNumber']}', '{row['Email']}', '{row['Address']}'),"
+                sql_query += values
+
+            # Remove the trailing comma
+            sql_query = sql_query.rstrip(',')
+
+            # Execute the SQL query
+            cursor.execute(sql_query)
+
+            # Commit the changes to the database
+            connection.commit()
+
+            print("Data inserted successfully.")
+
+    except Exception as e:
+        print(f"Error executing SQL query: {e}")
+
+
+
+def csv_data_collection(request):
+    admin_id_login = request.session.get('admin_id')
+    print_colored(admin_id_login)
+    if request.method == 'POST':
+        # Get the uploaded file from the request
+        uploaded_file = request.FILES.get('file_upload')
+
+        # Check if a file is provided
+        if uploaded_file:
+            # Read the content of the file
+            file_content = uploaded_file.read()
+
+            # Determine the file format based on the file extension
+            file_format = uploaded_file.name.split('.')[-1]
+
+            # Perform the data insertion
+            insert_faculty_data(file_content, file_format)
+
+            # Redirect or render a success page
+            return render(request, 'csv_collect_give.html', {'admin_id_login': admin_id_login})
+
+    # Render the upload form
+    return render(request, 'csv_collect_give.html', {'admin_id_login': admin_id_login})
+
+
+
+def return_faculty():
+    raw_sql_query = """
+    SELECT * FROM faculty;
+    """
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute(raw_sql_query)
+            if cursor.description:
+                data = cursor.fetchall()
+                return data
+    except Exception as e:
+        print(f"Error executing SQL query: {e}")
+
+
+def generate_csv(request):
+    # Call the function to get faculty data
+    faculty_data = return_faculty()
+
+    # Create CSV content
+    csv_content = "FacultyID,FirstName,LastName,DateOfBirth,Gender,ContactNumber,Email,Address\n"
+    for row in faculty_data:
+        csv_content += ",".join(map(str, row)) + "\n"
+
+    # Create a response with CSV content
+    response = HttpResponse(csv_content, content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="faculty_data.csv"'
+
+    return response
+
+
+def download_csv_page(request):
+    return render(request, 'download_csv_page.html')

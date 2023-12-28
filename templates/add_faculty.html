@@ -82,7 +82,7 @@
 
     <nav style="background-color: transparent;">
         <a class="btn btn-secondary" href="{% url 'admin_home' admin_id_login %}">Home</a>
-        <a class="btn btn-secondary" href="#">About</a>
+        <a class="btn btn-success" style="background-color: rgb(219, 66, 11);" href="{% url 'csv_data_collection' %}">Upload via CSV file</a>
         <a class="btn btn-secondary" href="#">Contact</a>
     </nav>
 
@@ -100,7 +100,8 @@
     {% endif %}
 
     <!-- Centered Form -->
-    <form method="post" action="{% url 'add_faculty' admin_id=admin_id %}" class="mt-4">
+            
+    <form method="post" action="{% url 'add_faculty' admin_id=admin_id %}" class="mt-4" style="background-color: rgba(255, 255, 255, 0.7); ">
         {% csrf_token %}
 
         <label for="first_name">First Name:</label>

@@ -225,8 +225,6 @@ DELIMITER ;
 
 # triggers_functions_PLSQL()
         
-
-
 def example_run_plsql():
     raw_sql_query = """
     INSERT INTO faculty (FacultyID, FirstName, LastName, Gender) VALUES (2443, 'John', 'Doe', 'Male');

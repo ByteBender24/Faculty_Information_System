@@ -55,9 +55,11 @@
             border-collapse: collapse;
             margin-top: 20px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            background-color: rgba(255, 255, 255, 0.4); 
         }
 
         th, td {
+            background-color: rgba(255, 255, 255, 0.5);
             border: 1px solid #dee2e6;
             padding: 8px;
             text-align: left;
@@ -166,13 +168,14 @@
         }
 
         body {
-    background-image: url("/static/img/img6.jpg");
+    background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url("/static/img/school.jpg");
 
   height: 100%;
 
   background-position: center;
     background-repeat: no-repeat;
   background-size: cover;
+  background-attachment: fixed;
 }
 
      /* Style the actions container */
@@ -195,10 +198,11 @@
         <h1>Manage Faculty</h1>
     </header>
 
-    <nav>
-        <a href="{% url 'admin_home' admin_id_login %}">Home</a>
-        <a href="#">About</a>
-        <a href="#">Contact</a>
+    <nav style="background-color: transparent;">
+        <a class="btn btn-light" href="{% url 'admin_home' admin_id_login %}">Home</a>
+        <a class="btn btn-success" style="background-color: rgb(219, 66, 11);" href="{% url 'csv_data_collection' %}">Upload via CSV file</a>
+        <a class="btn btn-success" style="background-color: rgb(159, 193, 8);" href="{% url 'download_csv' %}">Download CSV</a>
+        <a class="btn btn-light" href="#">Contact</a>
     </nav>
 
     <div class="container">
