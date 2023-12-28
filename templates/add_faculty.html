@@ -20,29 +20,26 @@
         }
 
         header {
-            background-color: #333;
-            padding: 10px;
-            text-align: center;
+            background-color: #343a40;
             color: white;
+            text-align: center;
+            padding: 10px;
         }
 
         nav {
-            background-color: #555;
-            overflow: hidden;
+            display: flex;
+            justify-content: space-around;
+            background-color: #f8f9fa;
+            padding: 10px;
         }
 
         nav a {
-            float: left;
-            display: block;
-            color: white;
-            text-align: center;
-            padding: 14px 16px;
             text-decoration: none;
+            color: #007bff;
         }
 
         nav a:hover {
-            background-color: #ddd;
-            color: black;
+            color: #0056b3;
         }
 
         .add-faculty {
@@ -64,7 +61,7 @@
         }
 
         body {
-    background-image: url("/static/img/img6.jpg");
+    background-image: url("/static/img/img1.jpg");
 
   height: 100%;
 
@@ -72,31 +69,21 @@
     background-repeat: no-repeat;
   background-size: cover;
 }
+
+
     </style>
 </head>
 
 <body>
 
-    <!-- Navigation Bar -->
     <header>
         <h1>Add Faculty</h1>
     </header>
 
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="#">Home</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav">
-                    <li class="nav-item"><a class="nav-link" href="#">Link 1</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Link 2</a></li>
-                    <!-- Add more navigation links if needed -->
-                </ul>
-            </div>
-        </div>
+    <nav style="background-color: transparent;">
+        <a class="btn btn-secondary" href="{% url 'admin_home' admin_id_login %}">Home</a>
+        <a class="btn btn-secondary" href="#">About</a>
+        <a class="btn btn-secondary" href="#">Contact</a>
     </nav>
 
 
@@ -117,13 +104,13 @@
         {% csrf_token %}
 
         <label for="first_name">First Name:</label>
-        <input type="text" id="first_name" name="first_name" class="form-control" required>
+        <input autocomplete="off" type="text" id="first_name" name="first_name" class="form-control" required>
 
         <label for="last_name">Last Name:</label>
-        <input type="text" id="last_name" name="last_name" class="form-control" required>
+        <input autocomplete="off" type="text" id="last_name" name="last_name" class="form-control" required>
 
         <label for="date_of_birth">Date of Birth:</label>
-        <input type="date" id="date_of_birth" name="date_of_birth" class="form-control" required>
+        <input autocomplete="off" type="date" id="date_of_birth" name="date_of_birth" class="form-control" required>
 
         <label for="gender">Gender:</label>
         <select id="gender" name="gender" class="form-control" required>
@@ -133,10 +120,10 @@
         </select>
 
         <label for="contact_number">Contact Number:</label>
-        <input type="text" id="contact_number" name="contact_number" class="form-control" required>
+        <input autocomplete="off" type="text" id="contact_number" name="contact_number" class="form-control" required>
 
         <label for="email">Email:</label>
-        <input type="email" id="email" name="email" class="form-control" required>
+        <input autocomplete="off" type="email" id="email" name="email" class="form-control" required>
 
         <label for="address">Address:</label>
         <textarea id="address" name="address" class="form-control" required></textarea>

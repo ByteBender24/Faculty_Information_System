@@ -6,7 +6,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Reports</title>
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300i,400" rel="stylesheet">
     <link rel="icon" href="{% static 'img/icon.png' %}">
 
@@ -14,32 +14,57 @@
         body {
             background-color: #100e17;
             font-family: 'Open Sans', sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        header {
+            background-color: #343a40;
+            color: white;
+            text-align: center;
+            padding: 10px;
+        }
+
+        nav {
+            background-color: #17141d;
+            overflow: hidden;
+        }
+
+        nav a {
+            float: left;
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
         }
 
         .container {
             position: absolute;
             height: 300px;
             width: 600px;
-            top: 60px;
-            left: calc(50% - 300px);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
             display: flex;
+            justify-content: space-between;
         }
 
         .card {
             display: flex;
             height: 280px;
-            width: 200px;
+            width: 140px; /* Adjusted width for better spacing */
             background-color: #17141d;
             border-radius: 10px;
             box-shadow: -1rem 0 3rem #000;
-            /*   margin-left: -50px; */
             transition: 0.4s ease-out;
             position: relative;
             left: 0px;
         }
 
         .card:not(:first-child) {
-            margin-left: -50px;
+            margin-left: 20px; /* Adjusted margin for better spacing */
         }
 
         .card:hover {
@@ -49,7 +74,7 @@
 
         .card:hover~.card {
             position: relative;
-            left: 50px;
+            left: 40px; /* Adjusted left position for better spacing */
             transition: 0.4s ease-out;
         }
 
@@ -57,16 +82,16 @@
             color: white;
             font-weight: 300;
             position: absolute;
-            left: 20px;
+            left: 10px; /* Adjusted left position for better spacing */
             top: 15px;
         }
 
         .bar {
             position: absolute;
             top: 100px;
-            left: 20px;
+            left: 10px; /* Adjusted left position for better spacing */
             height: 5px;
-            width: 150px;
+            width: 120px; /* Adjusted width for better spacing */
         }
 
         .emptybar {
@@ -87,14 +112,14 @@
         }
 
         .card:hover .filledbar {
-            width: 120px;
+            width: 100px; /* Adjusted width for better spacing */
             transition: 0.4s ease-out;
         }
 
         .circle {
             position: absolute;
             top: 150px;
-            left: calc(50% - 60px);
+            left: calc(50% - 30px); /* Adjusted left position for better spacing */
         }
 
         .stroke {
@@ -114,80 +139,88 @@
             transition: 0.6s ease-out;
         }
 
-        .navbar {
-            background-color: #17141d;
-            overflow: hidden;
-        }
+        body {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.9)), url("/static/img/school.jpg");
 
-        .navbar a {
-            float: left;
-            display: block;
-            color: white;
-            text-align: center;
-            padding: 14px 16px;
-            text-decoration: none;
-        }
+  height: 100%;
+
+  background-position: center center;
+    background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
+
+  
+}
     </style>
 </head>
 
 <body>
-    
+    <header>
+        <h1>Reports</h1>
+    </header>
+
+    <nav>
+        <a href="{% url 'admin_home' admin_id_login %}">Home</a>
+        <a href="#">About</a>
+        <a href="#">Contact</a>
+    </nav>
+
     <div class="container">
         <a href="{% url 'report_generation_gender' %}">
-        <div class="card">
-            <h3 class="title">Gender Report</h3>
-            <div class="bar">
-                <div class="emptybar"></div>
-                <div class="filledbar"></div>
+            <div class="card">
+                <h3 class="title">Gender Report</h3>
+                <div class="bar">
+                    <div class="emptybar"></div>
+                    <div class="filledbar"></div>
+                </div>
+                <div class="circle">
+                    <svg version="1.1" xmlns="http://www.w3.org/2000/svg">
+                        <circle class="stroke" cx="30" cy="30" r="25" />
+                    </svg>
+                </div>
             </div>
-            <div class="circle">
-                <svg version="1.1" xmlns="http://www.w3.org/2000/svg">
-                    <circle class="stroke" cx="60" cy="60" r="50" />
-                </svg>
-            </div>
-        </div>
         </a>
         <a href="{% url 'conference_join_report' %}">
-        <div class="card">
-            <h3 class="title">Conference Report</h3>
-            <div class="bar">
-                <div class="emptybar"></div>
-                <div class="filledbar"></div>
+            <div class="card">
+                <h3 class="title">Conference Report</h3>
+                <div class="bar">
+                    <div class="emptybar"></div>
+                    <div class="filledbar"></div>
+                </div>
+                <div class="circle">
+                    <svg version="1.1" xmlns="http://www.w3.org/2000/svg">
+                        <circle class="stroke" cx="30" cy="30" r="25" />
+                    </svg>
+                </div>
             </div>
-            <div class="circle">
-                <svg version="1.1" xmlns="http://www.w3.org/2000/svg">
-                    <circle class="stroke" cx="60" cy="60" r="50" />
-                </svg>
-            </div>
-        </div>
         </a>
         <a href="{% url 'department_join_report' %}">
-        <div class="card">
-            <h3 class="title">Department Report</h3>
-            <div class="bar">
-                <div class="emptybar"></div>
-                <div class="filledbar"></div>
+            <div class="card">
+                <h3 class="title">Department Report</h3>
+                <div class="bar">
+                    <div class="emptybar"></div>
+                    <div class="filledbar"></div>
+                </div>
+                <div class="circle">
+                    <svg version="1.1" xmlns="http://www.w3.org/2000/svg">
+                        <circle class="stroke" cx="30" cy="30" r="25" />
+                    </svg>
+                </div>
             </div>
-            <div class="circle">
-                <svg version="1.1" xmlns="http://www.w3.org/2000/svg">
-                    <circle class="stroke" cx="60" cy="60" r="50" />
-                </svg>
-            </div>
-        </div>
         </a>
         <a href="{% url 'department_join_report' %}">
-        <div class="card">
-            <h3 class="title">Average Experience</h3>
-            <div class="bar">
-                <div class="emptybar"></div>
-                <div class="filledbar"></div>
+            <div class="card">
+                <h3 class="title">Average Experience</h3>
+                <div class="bar">
+                    <div class="emptybar"></div>
+                    <div class="filledbar"></div>
+                </div>
+                <div class="circle">
+                    <svg version="1.1" xmlns="http://www.w3.org/2000/svg">
+                        <circle class="stroke" cx="30" cy="30" r="25" />
+                    </svg>
+                </div>
             </div>
-            <div class="circle">
-                <svg version="1.1" xmlns="http://www.w3.org/2000/svg">
-                    <circle class="stroke" cx="60" cy="60" r="50" />
-                </svg>
-            </div>
-        </div>
         </a>
     </div>
 </body>

@@ -12,6 +12,8 @@
     <!-- Add Bootstrap CSS link -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <link rel="icon" href="{% static 'img/icon.png' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
 
     <style>
         body {
@@ -52,6 +54,7 @@
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
         th, td {
@@ -62,9 +65,15 @@
 
         th {
             background-color: #007bff;
+            padding: 12px; /* Increase padding for better spacing */
             color: white;
+            text-align: left;
+    font-weight: bold;
         }
 
+        tr {
+    transition: background-color 0.3s;
+}
         tbody tr:hover {
             background-color: #f8f9fa;
         }
@@ -77,32 +86,32 @@
         }
 
         .tooltip {
-            position: relative;
-            display: inline-block;
-            cursor: pointer;
-        }
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+}
 
-        .tooltip .tooltiptext {
-            visibility: hidden;
-            width: 200px;
-            background-color: #007bff;
-            color: #fff;
-            text-align: center;
-            border-radius: 5px;
-            padding: 5px;
-            position: absolute;
-            z-index: 1;
-            bottom: 125%;
-            left: 50%;
-            margin-left: -100px;
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
+.tooltip .tooltiptext {
+    /* Add some styling to the tooltip */
+    background-color: #007bff;
+    color: #fff;
+    text-align: center;
+    border-radius: 5px;
+    padding: 8px;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    margin-left: -100px;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
 
-        .tooltip:hover .tooltiptext {
-            visibility: visible;
-            opacity: 1;
-        }
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
+    color: #343a40;
+}
 
         .modal-content {
             padding: 20px;
@@ -120,14 +129,15 @@
         }
 
         footer {
-            background-color: #343a40;
-            color: white;
-            text-align: center;
-            padding: 10px;
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-        }
+    background-color: #343a40;
+    color: white;
+    text-align: center;
+    padding: 10px;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    font-size: 14px;
+}
 
         .filter-section {
             display: flex;
@@ -164,6 +174,18 @@
     background-repeat: no-repeat;
   background-size: cover;
 }
+
+     /* Style the actions container */
+.actions-container {
+    display: flex;
+    gap: 8px; /* Adjust the gap as needed */
+}
+
+/* Style the "Update" and "Delete" buttons */
+.actions-container a {
+    text-decoration: none;
+}
+
     </style>
 </head>
 
@@ -174,7 +196,7 @@
     </header>
 
     <nav>
-        <a href="#">Home</a>
+        <a href="{% url 'admin_home' admin_id_login %}">Home</a>
         <a href="#">About</a>
         <a href="#">Contact</a>
     </nav>
@@ -188,7 +210,7 @@
                     <option value="id">Search by ID</option>
                     <option value="name">Search by Name</option>
                 </select>
-                <input type="text" class="form-control search-input" name="search" placeholder="Enter ID or Name">
+                <input autocomplete="off" type="text" class="form-control search-input" name="search" placeholder="Enter ID or Name">
                 <button class="btn btn-primary ml-2" type="submit">Search</button>
             </div>
 
@@ -197,8 +219,8 @@
                 <button class="filter-button" data-toggle="modal" data-target="#sortFilterModal" type="button">Sort / Filter</button>
 
                 <!-- Add hidden input fields to pass sort and filter values -->
-                <input type="hidden" name="sort" id="sort-input" value="">
-                <input type="hidden" name="filter" id="filter-input" value="">
+                <input autocomplete="off" type="hidden" name="sort" id="sort-input" value="">
+                <input autocomplete="off" type="hidden" name="filter" id="filter-input" value="">
             </div>
         </form>
 
@@ -255,8 +277,10 @@
                             </div>
                         </td>
                         <td>
-                            <a href="{% url 'update_faculty' faculty.FacultyID %}">Update</a>
-                            <a href="{% url 'delete_faculty' faculty.FacultyID %}">Delete</a>
+                            <div class="actions-container">
+                            <a href="{% url 'update_faculty' faculty.FacultyID %}" class="btn btn-secondary">Update</a>
+                            <a href="{% url 'delete_faculty' faculty.FacultyID %}" class="btn btn-sm btn-danger"><i class="fa-solid fa-trash-can"></i></a>
+                                </div>
                         </td>
                     </tr>
                 {% endfor %}

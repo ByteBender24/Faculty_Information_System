@@ -16,19 +16,32 @@
         body {
             font-family: Arial, sans-serif;
             margin: 20px;
+            background-image: url("/static/img/school.jpg");
+            height: 100%;
+            background-position: center center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-attachment: fixed;
         }
 
         h2 {
             margin-bottom: 20px;
         }
 
-        form {
-            max-width: 600px;
-            margin: auto;
+        .container {
+             /* Adjust the opacity to make it a little pale */
+            padding: 20px;
+            border-radius: 10px;
         }
 
         .card {
             margin-bottom: 20px;
+            background-color: rgba(255, 255, 255, 0.8);
+        }
+
+        form {
+            max-width: 600px;
+            margin: auto;
         }
 
         .info-box {
@@ -44,18 +57,27 @@
         #dashboard1 {
             margin-bottom: 30px;
         }
+
         .action-column {
-        width: 130px; /* Adjust the width as needed */
-    }
+            width: 130px; /* Adjust the width as needed */
+        }
 
-    body {
-    background-image: url("/static/img/img6.jpg");
+        /* Adjust card width for salary details */
+        .salary-card {
+            width: 200px;
+            margin-right: 20px;
+            display: inline-block;
+        }
 
-  height: 100%;
+        /* Definition for each card */
+        .card-definition {
+            margin-top: 10px;
+            font-style: italic;
+            color: #555;
+        }
 
-  background-position: center;
-    background-repeat: no-repeat;
-  background-size: cover;
+        .table-bordered {
+    border-color: #beb8b8; /* Change the color to your preferred shade */
 }
     </style>
 </head>
@@ -72,49 +94,54 @@
             <div class="card-body">
                 <form method="POST" action="{% url 'update_faculty_idv' teacher.teacher_id %}">
                     {% csrf_token %}
-                    <div class="mb-3">
-                        <label for="first_name" class="form-label">First Name</label>
-                        <input type="text" class="form-control" id="first_name" name="first_name"
-                            value="{{ teacher.first_name }}" required>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="first_name" class="form-label">First Name</label>
+                            <input autocomplete="off" type="text" class="form-control" id="first_name" name="first_name"
+                                value="{{ teacher.first_name }}" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="last_name" class="form-label">Last Name</label>
+                            <input autocomplete="off" type="text" class="form-control" id="last_name" name="last_name"
+                                value="{{ teacher.last_name }}" required>
+                        </div>
                     </div>
-                    <div class="mb-3">
-                        <label for="last_name" class="form-label">Last Name</label>
-                        <input type="text" class="form-control" id="last_name" name="last_name"
-                            value="{{ teacher.last_name }}" required>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="date_of_birth" class="form-label">Date of Birth</label>
+                            <input autocomplete="off" type="date" class="form-control" id="date_of_birth" name="date_of_birth"
+                                value="{{ teacher.dob|date:'Y-m-d' }}" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="gender" class="form-label">Gender</label>
+                            <select class="form-select" id="gender" name="gender" required>
+                                <option value="Male" {% if teacher.gender == "Male" %}selected{% endif %}>Male</option>
+                                <option value="Female" {% if teacher.gender == "Female" %}selected{% endif %}>Female</option>
+                            </select>
+                        </div>
                     </div>
-                    <div class="mb-3">
-                        <label for="date_of_birth" class="form-label">Date of Birth</label>
-                        <input type="date" class="form-control" id="date_of_birth" name="date_of_birth"
-                            value="{{ teacher.dob|date:'Y-m-d' }}" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="gender" class="form-label">Gender</label>
-                        <select class="form-select" id="gender" name="gender" required>
-                            <option value="Male" {% if teacher.gender == "Male" %}selected{% endif %}>Male</option>
-                            <option value="Female" {% if teacher.gender == "Female" %}selected{% endif %}>Female</option>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label for="contact_number" class="form-label">Contact Number</label>
-                        <input type="tel" class="form-control" id="contact_number" name="contact_number"
-                            value="{{ teacher.phone }}" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="email" class="form-label">Email</label>
-                        <input type="email" class="form-control" id="email" name="email" value="{{ teacher.email }}"
-                            required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="address" class="form-label">Address</label>
-                        <textarea class="form-control" id="address" name="address" rows="3"
-                            required>{{ teacher.address }}</textarea>
-                    </div>
-
+                    <div class="row mb-3">
+    <div class="col-md-6">
+        <label for="contact_number" class="form-label">Contact Number</label>
+        <input autocomplete="off" type="tel" class="form-control" id="contact_number" name="contact_number"
+            value="{{ teacher.phone }}" required>
+    </div>
+    <div class="col-md-6">
+        <label for="email" class="form-label">Email</label>
+        <input autocomplete="off" type="email" class="form-control" id="email" name="email" value="{{ teacher.email }}"
+            required>
+    </div>
+</div>
+<div class="mb-3">
+    <label for="address" class="form-label">Address</label>
+    <textarea class="form-control" id="address" name="address" rows="3"
+        required>{{ teacher.address }}</textarea>
+</div>
+                    <!-- Add other input fields for faculty information as needed -->
                     <button type="submit" class="btn btn-primary">Update</button>
                 </form>
             </div>
         </div>
-
 
         <!-- Teaching Information -->
         <div class="card">
@@ -123,7 +150,7 @@
             </div>
             <div class="card-body">
                 {% for course in teaching %}
-                <div class="info-box">
+                <div class="info-box salary-card">
                     <p><strong>Course ID:</strong> {{ course.courseID }}</p>
                     <p><strong>Semester:</strong> {{ course.sem }}</p>
                     <p><strong>Year:</strong> {{ course.year }}</p>
@@ -147,14 +174,14 @@
             </div>
             <div class="card-body">
                 {% for salary_info in salary %}
-                <div class="info-box">
+                <div class="info-box salary-card">
                     <p><strong>Salary ID:</strong> {{ salary_info.salaryID }}</p>
                     <p><strong>Amount:</strong> {{ salary_info.amt }}</p>
                     <p><strong>Payment Date:</strong> {{ salary_info.paydate }}</p>
                     <p><strong>Semester:</strong> {{ salary_info.sem }}</p>
                     <!-- Add Delete and Update buttons for Salary -->
                     <div class="delete-update-buttons">
-
+                        <!-- Your buttons go here -->
                     </div>
                 </div>
                 {% endfor %}
@@ -184,18 +211,18 @@
                             {% csrf_token %}
                             <tr>
                                 <td>{{ paper_info.paperID }}</td>
-                                <td><input type="text" class="form-control" name="title" value="{{ paper_info.title }}">
+                                <td><input autocomplete="off" type="text" class="form-control" name="title" value="{{ paper_info.title }}">
                                 </td>
-                                <td><input type="text" class="form-control" name="journal"
+                                <td><input autocomplete="off" type="text" class="form-control" name="journal"
                                         value="{{ paper_info.journal }}">
                                 </td>
-                                <td><input type="date" class="form-control" name="publication_date"
+                                <td><input autocomplete="off" type="date" class="form-control" name="publication_date"
                                         value="{{ paper_info.date|date:'Y-m-d' }}"></td>
                                 <td class="action-column">
                                     <button type="submit" class="btn btn-secondary update-btn">Update</button>
                                     <a href="{% url 'delete_paper_idv' teacher.teacher_id paper_info.paperID  %}" class="btn btn-sm btn-danger"><i class="fa-solid fa-trash-can"></i></a>
                                     <!-- Add a hidden field to store Paper ID -->
-                                    <input type="hidden" name="paperID" value="{{ paper_info.paperID }}">
+                                    <input autocomplete="off" type="hidden" name="paperID" value="{{ paper_info.paperID }}">
                                 </td>
                             </tr>
                         </form>
@@ -228,17 +255,17 @@
                             {% csrf_token %}
                             <tr>
                                 <td>{{ conference_info.conferenceID }}</td>
-                                <td><input type="text" class="form-control" name="conferenceName"
+                                <td><input autocomplete="off" type="text" class="form-control" name="conferenceName"
                                         value="{{ conference_info.name }}"></td>
-                                <td><input type="text" class="form-control" name="location"
+                                <td><input autocomplete="off" type="text" class="form-control" name="location"
                                         value="{{ conference_info.location }}"></td>
-                                <td><input type="date" class="form-control" name="dateAttended"
+                                <td><input autocomplete="off" type="date" class="form-control" name="dateAttended"
                                         value="{{ conference_info.date|date:'Y-m-d' }}"></td>
                                 <td class="action-column">
                                     <button type="submit" class="btn btn-secondary update-btn">Update</button>
                                     <a href="{% url 'delete_conference_idv' teacher.teacher_id conference_info.conferenceID %}" class="btn btn-sm btn-danger"><i class="fa-solid fa-trash-can"></i></a>
                                     <!-- Add a hidden field to store Conference ID -->
-                                    <input type="hidden" name="conferenceID" value="{{ conference_info.conferenceID }}">
+                                    <input autocomplete="off" type="hidden" name="conferenceID" value="{{ conference_info.conferenceID }}">
                                 </td>
                             </tr>
                         </form>
@@ -272,18 +299,18 @@
                             {% csrf_token %}
                             <tr>
                                 <td>{{ patent_info.patentID }}</td>
-                                <td><input type="text" class="form-control" name="title"
+                                <td><input autocomplete="off" type="text" class="form-control" name="title"
                                         value="{{ patent_info.title }}">
                                 </td>
-                                <td><input type="text" class="form-control" name="patentNumber"
+                                <td><input autocomplete="off" type="text" class="form-control" name="patentNumber"
                                         value="{{ patent_info.patentnum }}"></td>
-                                <td><input type="date" class="form-control" name="dateIssued"
+                                <td><input autocomplete="off" type="date" class="form-control" name="dateIssued"
                                         value="{{ patent_info.date|date:'Y-m-d' }}"></td>
                                 <td class="action-column">
                                     <button type="submit" class="btn btn-secondary update-btn">Update</button>
                                     <a href="{% url 'delete_patent_idv' teacher.teacher_id patent_info.patentID %}" class="btn btn-sm btn-danger"><i class="fa-solid fa-trash-can"></i></a>
                                     <!-- Add a hidden field to store Patent ID -->
-                                    <input type="hidden" name="patentID" value="{{ patent_info.patentID }}">
+                                    <input autocomplete="off" type="hidden" name="patentID" value="{{ patent_info.patentID }}">
                                 </td>
                             </tr>
                         </form>
@@ -316,19 +343,19 @@
                             {% csrf_token %}
                             <tr>
                                 <td>{{ exp_info.expID }}</td>
-                                <td><input type="text" class="form-control" name="organization"
+                                <td><input autocomplete="off" type="text" class="form-control" name="organization"
                                         value="{{ exp_info.ord }}">
                                 </td>
-                                <td><input type="text" class="form-control" name="position"
+                                <td><input autocomplete="off" type="text" class="form-control" name="position"
                                         value="{{ exp_info.position }}">
                                 </td>
-                                <td><input type="number" class="form-control" name="experience"
+                                <td><input autocomplete="off" type="number" class="form-control" name="experience"
                                         value="{{ exp_info.experience }}"></td>
                                 <td class="action-column">
                                     <button type="submit" class="btn btn-secondary update-btn">Update</button>
                                     <a href="{% url 'delete_work_exp_idv' teacher.teacher_id exp_info.expID %}" class="btn btn-sm btn-danger"><i class="fa-solid fa-trash-can"></i></a>
                                     <!-- Add a hidden field to store Experience ID -->
-                                    <input type="hidden" name="expID" value="{{ exp_info.expID }}">
+                                    <input autocomplete="off" type="hidden" name="expID" value="{{ exp_info.expID }}">
                                 </td>
                             </tr>
                         </form>
@@ -362,24 +389,24 @@
                             {% csrf_token %}
                             <tr>
                                 <td>{{ certificate_info.certID }}</td>
-                                <td><input type="text" class="form-control" name="title"
+                                <td><input autocomplete="off" type="text" class="form-control" name="title"
                                         value="{{ certificate_info.name }}">
                                 </td>
-                                <td><input type="text" class="form-control" name="issuer"
+                                <td><input autocomplete="off" type="text" class="form-control" name="issuer"
                                         value="{{ certificate_info.issueAuth }}">
                                 </td>
-                                <td><input type="date" class="form-control" name="issue_date"
+                                <td><input autocomplete="off" type="date" class="form-control" name="issue_date"
                                         value="{{ certificate_info.issueDate|date:'Y-m-d' }}"></td>
                                 <td>
                                     <label for="certificateFile" class="form-label">Certificate File</label>
-                                    <input type="file" class="form-control" id="certificateFile" name="certificateFile"
+                                    <input autocomplete="off" type="file" class="form-control" id="certificateFile" name="certificateFile"
                                         accept=".pdf, .doc, .docx">
                                 </td>
                                 <td class="action-column">
                                     <button type="submit" class="btn btn-secondary update-btn">Update</button>
                                     <a href="{% url 'delete_certificate_idv' teacher.teacher_id certificate_info.certID %}" class="btn btn-sm btn-danger"><i class="fa-solid fa-trash-can"></i></a>
                                     <!-- Add a hidden field to store Certificate ID -->
-                                    <input type="hidden" name="certificateID"
+                                    <input autocomplete="off" type="hidden" name="certificateID"
                                         value="{{ certificate_info.certID }}">
                                 </td>
                             </tr>
@@ -414,20 +441,20 @@
                             {% csrf_token %}
                             <tr>
                                 <td>{{ education_info.eduID }}</td>
-                                <td><input type="text" class="form-control" name="degree"
+                                <td><input autocomplete="off" type="text" class="form-control" name="degree"
                                         value="{{ education_info.degree }}"></td>
-                                <td><input type="text" class="form-control" name="major"
+                                <td><input autocomplete="off" type="text" class="form-control" name="major"
                                         value="{{ education_info.major }}">
                                 </td>
-                                <td><input type="text" class="form-control" name="university"
+                                <td><input autocomplete="off" type="text" class="form-control" name="university"
                                         value="{{ education_info.uni }}"></td>
-                                <td><input type="text" class="form-control" name="yearOfPassing"
+                                <td><input autocomplete="off" type="text" class="form-control" name="yearOfPassing"
                                         value="{{ education_info.yearofpass }}"></td>
                                 <td class="action-column">
                                     <button type="submit" class="btn btn-secondary update-btn">Update</button>
                                     <a href="{% url 'delete_education_details_idv' teacher.teacher_id education_info.eduID %}" class="btn btn-sm btn-danger"><i class="fa-solid fa-trash-can"></i></a>
                                     <!-- Add a hidden field to store Education ID -->
-                                    <input type="hidden" name="eduID" value="{{ education_info.eduID }}">
+                                    <input autocomplete="off" type="hidden" name="eduID" value="{{ education_info.eduID }}">
                                 </td>
                             </tr>
                         </form>

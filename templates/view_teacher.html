@@ -39,21 +39,78 @@
         .delete-update-buttons {
             margin-top: 10px;
         }
+header {
+        position: relative;
+        z-index: 1;
+    }
 
-        body {
-    background-image: url("/static/img/img6.jpg");
+    .container {
+        max-width: 800px;
+        margin: auto;
+    }
+
+    .navbar {
+        background-color: transparent;
+        overflow: hidden;
+    }
+
+    .navbar a {
+        float: left;
+        display: block;
+        color: white;
+        text-align: center;
+        padding: 14px 16px;
+        text-decoration: none;
+        transition: background-color 0.3s;
+    }
+
+    .navbar a:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    h1 {
+        margin-bottom: 20px;
+        color: white;
+    }
+
+
+body {
+    background-image: url("/static/img/img1.jpg");
 
   height: 100%;
 
-  background-position: center;
+  background-position: center center;
     background-repeat: no-repeat;
   background-size: cover;
+  background-attachment: fixed;
 }
+
+.container {
+             /* Adjust the opacity to make it a little pale */
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .card {
+            margin-bottom: 20px;
+            background-color: rgba(255, 255, 255, 0.8);
+        }
     </style>
 </head>
 
 <body>
-
+    <header>
+        <div class="container">
+            <h1 style="text-align: center;">Faculty Information</h1>
+        </div>
+    </header>
+    <nav class="navbar">
+            <div class="container">
+                <a href="{% url 'teacher_dashboard' teacher.teacher_id %}">Home</a>
+                <a href="#">About</a>
+                <a href="#">Contact</a>
+            </div>
+        </nav>
     <div class="container">
 
         <!-- Faculty Information -->

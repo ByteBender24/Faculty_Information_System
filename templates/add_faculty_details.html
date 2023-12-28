@@ -50,7 +50,7 @@
 
 
         footer {
-            background-color: #f8f9fa;
+            background-color: transparent;
             padding: 10px;
             margin-top: auto;
         }
@@ -117,7 +117,7 @@
         }
 
         body {
-    background-image: url("/static/img/img6.jpg");
+    background-image: url("/static/img/school.jpg");
 
   height: 100%;
 
@@ -125,6 +125,23 @@
     background-repeat: no-repeat;
   background-size: cover;
 }
+
+.btn-secondary {
+    align-items: end;
+    margin-bottom: 20px;
+}
+
+.container {
+             /* Adjust the opacity to make it a little pale */
+            padding: 20px;
+            border-radius: 10px;
+
+        }
+
+        .card {
+                        background-color: rgba(255, 255, 255, 0.2);
+
+        }
     </style>
 </head>
 
@@ -155,19 +172,19 @@
                     <div class="card-body">
                         <div class="mb-3">
                             <label for="degree" class="form-label">Degree</label>
-                            <input type="text" class="form-control" id="degree" name="degree" />
+                            <input autocomplete="off" type="text" class="form-control" id="degree" name="degree" />
                         </div>
                         <div class="mb-3">
                             <label for="major" class="form-label">Major</label>
-                            <input type="text" class="form-control" id="major" name="major" />
+                            <input autocomplete="off" type="text" class="form-control" id="major" name="major" />
                         </div>
                         <div class="mb-3">
                             <label for="university" class="form-label">University</label>
-                            <input type="text" class="form-control" id="university" name="university" />
+                            <input autocomplete="off" type="text" class="form-control" id="university" name="university" />
                         </div>
                         <div class="mb-3">
                             <label for="yearOfPassing" class="form-label">Year of Passing</label>
-                            <input type="text" class="form-control" id="yearOfPassing" name="yearOfPassing" />
+                            <input autocomplete="off" type="text" class="form-control" id="yearOfPassing" name="yearOfPassing" />
                         </div>
                     </div>
                 </div>
@@ -183,15 +200,15 @@
                     <div class="card-body">
                         <div class="mb-3">
                             <label for="certificateName" class="form-label">Certificate Name</label>
-                            <input type="text" class="form-control" id="certificateName" name="certificateName" />
+                            <input autocomplete="off" type="text" class="form-control" id="certificateName" name="certificateName" />
                         </div>
                         <div class="mb-3">
                             <label for="issuingAuthority" class="form-label">Issuing Authority</label>
-                            <input type="text" class="form-control" id="issuingAuthority" name="issuingAuthority" />
+                            <input autocomplete="off" type="text" class="form-control" id="issuingAuthority" name="issuingAuthority" />
                         </div>
                         <div class="mb-3">
                             <label for="issueDate" class="form-label">Issue Date</label>
-                            <input type="date" class="form-control" id="issueDate" name="issueDate" />
+                            <input autocomplete="off" type="date" class="form-control" id="issueDate" name="issueDate" />
                         </div>
                     </div>
                 </div>
@@ -207,15 +224,15 @@
                     <div class="card-body">
                         <div class="mb-3">
                             <label for="title" class="form-label">Title</label>
-                            <input type="text" class="form-control" id="title" name="title" />
+                            <input autocomplete="off" type="text" class="form-control" id="title" name="title" />
                         </div>
                         <div class="mb-3">
                             <label for="patentNumber" class="form-label">Patent Number</label>
-                            <input type="text" class="form-control" id="patentNumber" name="patentNumber" />
+                            <input autocomplete="off" type="text" class="form-control" id="patentNumber" name="patentNumber" />
                         </div>
                         <div class="mb-3">
                             <label for="dateIssued" class="form-label">Date Issued</label>
-                            <input type="date" class="form-control" id="dateIssued" name="dateIssued" />
+                            <input autocomplete="off" type="date" class="form-control" id="dateIssued" name="dateIssued" />
                         </div>
                     </div>
                 </div>
@@ -231,15 +248,15 @@
                     <div class="card-body">
                         <div class="mb-3">
                             <label for="paperTitle" class="form-label">Paper Title</label>
-                            <input type="text" class="form-control" id="paperTitle" name="paperTitle" />
+                            <input autocomplete="off" type="text" class="form-control" id="paperTitle" name="paperTitle" />
                         </div>
                         <div class="mb-3">
                             <label for="journal" class="form-label">Journal</label>
-                            <input type="text" class="form-control" id="journal" name="journal" />
+                            <input autocomplete="off" type="text" class="form-control" id="journal" name="journal" />
                         </div>
                         <div class="mb-3">
                             <label for="publicationDate" class="form-label">Publication Date</label>
-                            <input type="date" class="form-control" id="publicationDate" name="publicationDate" />
+                            <input autocomplete="off" type="date" class="form-control" id="publicationDate" name="publicationDate" />
                         </div>
                     </div>
                 </div>
@@ -255,15 +272,15 @@
                     <div class="card-body">
                         <div class="mb-3">
                             <label for="organization" class="form-label">Organization</label>
-                            <input type="text" class="form-control" id="organization" name="organization" />
+                            <input autocomplete="off" type="text" class="form-control" id="organization" name="organization" />
                         </div>
                         <div class="mb-3">
                             <label for="position" class="form-label">Position</label>
-                            <input type="text" class="form-control" id="position" name="position" />
+                            <input autocomplete="off" type="text" class="form-control" id="position" name="position" />
                         </div>
                         <div class="mb-3">
                             <label for="experience" class="form-label">Experience</label>
-                            <input type="number" class="form-control" id="experience" name="experience" />
+                            <input autocomplete="off" type="number" class="form-control" id="experience" name="experience" />
                         </div>
                     </div>
                 </div>
@@ -279,15 +296,15 @@
                     <div class="card-body">
                         <div class="mb-3">
                             <label for="conferenceName" class="form-label">Conference Name</label>
-                            <input type="text" class="form-control" id="conferenceName" name="conferenceName" />
+                            <input autocomplete="off" type="text" class="form-control" id="conferenceName" name="conferenceName" />
                         </div>
                         <div class="mb-3">
                             <label for="location" class="form-label">Location</label>
-                            <input type="text" class="form-control" id="location" name="location" />
+                            <input autocomplete="off" type="text" class="form-control" id="location" name="location" />
                         </div>
                         <div class="mb-3">
                             <label for="date" class="form-label">Date</label>
-                            <input type="date" class="form-control" id="date" name="date" />
+                            <input autocomplete="off" type="date" class="form-control" id="date" name="date" />
                         </div>
                     </div>
                 </div>

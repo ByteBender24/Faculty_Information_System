@@ -2,6 +2,7 @@
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,15 +10,37 @@
 
     <!-- Add Bootstrap CSS in dark mode -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous">
     <link rel="icon" href="{% static 'img/icon.png' %}">
-  
+
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 20px;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
             background-color: #1a1a1a; /* Dark background color */
             color: #ffffff; /* Light text color */
+        }
+
+        header {
+            background-color: #343a40;
+            color: white;
+            text-align: center;
+            padding: 10px;
+        }
+
+        nav {
+            background-color: #17141d;
+            overflow: hidden;
+        }
+
+        nav a {
+            float: left;
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
         }
 
         .container {
@@ -42,16 +65,31 @@
             background-color: #28a745; /* Green button color */
             border-color: #28a745; /* Green border color */
         }
+
+        @media print {
+            nav {
+                display: none;
+            }
+        }
     </style>
 
     <!-- Include Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
+
 <body>
+    
+
     <header class="bg-dark text-white text-center py-2">
         <h1>Gender Based Report</h1>
     </header>
+<nav>
+        <a href="{% url 'admin_home' admin_id_login %}">Home</a>
+        <a href="#">About</a>
+        <a href="#">Contact</a>
+    <a href="javascript:history.back()">Back</a>
 
+    </nav>
     <div class="container">
         <!-- Gender Table Container -->
         <div id="genderTableContainer" class="mb-3">
@@ -164,6 +202,6 @@
     }
 </script>
 
-
 </body>
+
 </html>

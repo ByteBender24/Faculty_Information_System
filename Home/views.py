@@ -524,6 +524,7 @@ def get_teaching(teacher_id):
                 return context
     except Exception as e:
         print(f"Error executing SQL query: {e}")
+        
 def get_faculty_by_gender(gender = 'Male', sort=None):
     raw_sql_query = f"""
     SELECT FacultyID, FirstName, LastName, DateOfBirth, Gender, ContactNumber, Email, Address 
@@ -668,8 +669,9 @@ def admin_home(request, admin_id):
 
 
 def add_faculty(request, admin_id):
+    admin_id_login = request.session.get('admin_id')
     if request.method == "GET":
-        return render(request, 'add_faculty.html', {'admin_id': admin_id})
+        return render(request, 'add_faculty.html', {'admin_id': admin_id, 'admin_id_login' : admin_id_login})
     if request.method == "POST":
         first_name = request.POST.get('first_name')
         last_name = request.POST.get('last_name')
@@ -690,9 +692,11 @@ def add_faculty(request, admin_id):
 #-------------------------------------------------------------------------Manage_faculty - admin-----------------------------------------------------------------------------------------------------------
 def manage_faculty(request):
     sort = None
+    admin_id_login = request.session.get('admin_id')
+
     if request.method == "GET":
         faculties = get_all_faculties(sort)
-        return render(request, 'manage_faculty.html', {'faculties': faculties})
+        return render(request, 'manage_faculty.html', {'faculties': faculties, 'admin_id_login' : admin_id_login})
     if request.method == "POST":
         if request.POST.get('search_category') == 'id':
             id1 = request.POST.get('search')
@@ -1154,13 +1158,15 @@ Report types :
 
 
 def report_generation(request):
-    admin_id = request.session.get('admin_id')
-    admin_id = 1234
-    return render(request, 'report_generation.html', {'admin_id' : admin_id})
+    admin_id_login = request.session.get('admin_id')
+    admin_id = admin_id_login
+    return render(request, 'report_generation.html', {'admin_id' : admin_id, 'admin_id_login' : admin_id_login})
 
 def report_view_gender(request):
     gender_data, male, female = gender_report()
-    return render(request, 'report_gender.html', {'gender_data': gender_data, 'male':male, 'female':female})
+    admin_id_login = request.session.get('admin_id')
+
+    return render(request, 'report_gender.html', {'gender_data': gender_data, 'male':male, 'female':female , 'admin_id_login' : admin_id_login})
 
 def gender_report():
     raw_sql_query = f"""

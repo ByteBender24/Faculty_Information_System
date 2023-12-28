@@ -81,7 +81,7 @@
         }
 
         body {
-    background-image: url("/static/img/img6.jpg");
+    background-image: url("/static/img/supplies.jpg");
 
   height: 100%;
 
@@ -98,13 +98,14 @@
 </header>
 
 <nav class="navbar navbar-light bg-light">
-    <a class="navbar-brand" href="#home">Home</a>
+    <a class="navbar-brand" href="{% url 'login' %}">Logout</a>
+
     <a class="navbar-brand" href="#profile">Profile</a>
     <a class="navbar-brand" href="#details">Details</a>
     <!-- Add more navigation links as needed -->
 </nav>
 
-<div class="dashboard-container">
+<div class="dashboard-container" style="padding-top: 30px;">
     <div class="profile-container">
         <h2>{{ first_name }}</h2>
         <p>Email: {{ email }}</p>

@@ -104,15 +104,15 @@
                     {% csrf_token %}
                     <div class="mb-3">
                         <label for="first_name" class="form-label">First Name</label>
-                        <input type="text" class="form-control" id="first_name" name="first_name" value="{{ first_name }}" required>
+                        <input autocomplete="off" type="text" class="form-control" id="first_name" name="first_name" value="{{ first_name }}" required>
                     </div>
                     <div class="mb-3">
                         <label for="last_name" class="form-label">Last Name</label>
-                        <input type="text" class="form-control" id="last_name" name="last_name" value="{{ last_name }}" required>
+                        <input autocomplete="off" type="text" class="form-control" id="last_name" name="last_name" value="{{ last_name }}" required>
                     </div>
                     <div class="mb-3">
                         <label for="date_of_birth" class="form-label">Date of Birth</label>
-                        <input type="date" class="form-control" id="date_of_birth" name="date_of_birth" value="{{ dob|date:'Y-m-d' }}" required>
+                        <input autocomplete="off" type="date" class="form-control" id="date_of_birth" name="date_of_birth" value="{{ dob|date:'Y-m-d' }}" required>
                     </div>
                     <div class="mb-3">
                         <label for="gender" class="form-label">Gender</label>
@@ -123,11 +123,11 @@
                     </div>
                     <div class="mb-3">
                         <label for="contact_number" class="form-label">Contact Number</label>
-                        <input type="tel" class="form-control" id="contact_number" name="contact_number" value="{{ phone }}" required>
+                        <input autocomplete="off" type="tel" class="form-control" id="contact_number" name="contact_number" value="{{ phone }}" required>
                     </div>
                     <div class="mb-3">
                         <label for="email" class="form-label">Email</label>
-                        <input type="email" class="form-control" id="email" name="email" value="{{ email }}" required>
+                        <input autocomplete="off" type="email" class="form-control" id="email" name="email" value="{{ email }}" required>
                     </div>
                     <div class="mb-3">
                         <label for="address" class="form-label">Address</label>
