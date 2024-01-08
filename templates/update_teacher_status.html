@@ -1,0 +1,260 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Faculty Status</title>
+    <!-- Add Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="icon" href="{% static 'img/icon.png' %}">
+
+<style>
+    body {
+        font-family: 'Arial', sans-serif;
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url("/static/img/school.jpg");
+        height: 100%;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-attachment: fixed;
+    }
+
+    h2 {
+        margin-bottom: 20px;
+    }
+
+    .container {
+        padding: 20px;
+        border-radius: 10px;
+        background-color: #fff;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        color: #333;
+        background-color: rgba(209, 74, 74, 0.4); 
+    }
+
+    .table-bordered {
+        border-color: #ccc;
+    }
+
+    th, td {
+        text-align: center;
+    }
+
+    th {
+        background-color: #007bff;
+        padding: 12px;
+        color: rgb(6, 2, 39);
+        text-align: left;
+        font-weight: bold;
+        background-color: rgba(128, 78, 78, 0.4); 
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        background-color: rgba(117, 65, 65, 0.4);
+    }
+
+    tr {
+        background-color: rgba(255, 255, 255, 0.4); 
+        transition: background-color 0.3s;
+    }
+
+    tbody tr:hover {
+        background-color: #f8f9fa;
+    }
+
+    .address-cell {
+        max-width: 200px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .tooltip {
+        position: relative;
+        display: inline-block;
+        cursor: pointer;
+    }
+
+    .tooltip .tooltiptext {
+        background-color: #007bff;
+        color: #fff;
+        text-align: center;
+        border-radius: 5px;
+        padding: 8px;
+        position: absolute;
+        z-index: 1;
+        bottom: 125%;
+        left: 50%;
+        margin-left: -100px;
+        opacity: 0;
+        transition: opacity 0.3s;
+    }
+
+    .tooltip:hover .tooltiptext {
+        visibility: visible;
+        opacity: 1;
+        color: #343a40;
+    }
+
+    .modal-content {
+        padding: 20px;
+        max-height: calc(100vh - 100px);
+        overflow-y: auto;
+    }
+
+    footer {
+        background-color: #343a40;
+        color: white;
+        text-align: center;
+        padding: 10px;
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        font-size: 14px;
+    }
+
+    .filter-section {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 20px;
+    }
+
+    .search-form {
+        display: flex;
+    }
+
+    .search-input {
+        width: 200px;
+    }
+
+    .filter-button {
+        background-color: #007bff;
+        color: white;
+        padding: 8px;
+        border: none;
+        cursor: pointer;
+    }
+
+    .filter-button:hover {
+        background-color: #0056b3;
+    }
+
+    /* Style the actions container */
+    .actions-container {
+        display: flex;
+        gap: 8px;
+    }
+
+    /* Style the "Update" and "Delete" buttons */
+    .actions-container a {
+        text-decoration: none;
+    }
+
+    nav {
+            display: flex;
+            justify-content: space-around;
+            background-color: #f8f9fa;
+            padding: 10px;
+        }
+</style>
+
+</head>
+
+<body>
+    <header style="background-color: rgba(82, 76, 141, 0.4); padding : 10px;">
+        <h1 style="color: #f8f9fa; text-align: center;">Update Faculty Status</h1>
+    </header>
+
+    <nav style="background-color: transparent;">
+        <a class="btn btn-light" href="{% url 'admin_home' admin_id_login %}">Home</a>
+        <a class="btn btn-success" style="background-color: rgb(219, 66, 11);" href="{% url 'add_faculty_status_from_csv' %}">Upload via CSV file</a>
+        <a class="btn btn-light" href="#">Contact</a>
+    </nav>
+    <div class="container mt-5">
+
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Teacher ID</th>
+                            <th>Area of Specialization</th>
+                            <th>Designation</th>
+                            <th>Date of Joining</th>
+                            <th>Date of Associate</th>
+                            <th>Date of Professor</th>
+                            <th>Currently Associate</th>
+                            <th>Nature of Association</th>
+                            <th>Contract Type</th>
+                            <th>Date of Leaving</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for faculty_status in faculty_statuses %}
+                        <form method="POST" action="{% url 'update_faculty_status_idv' faculty_status.FacultyId %}">
+            {% csrf_token %}
+                            <tr>
+                                <td>{{ faculty_status.FacultyId }}</td>
+                                <td>
+                                    <input type="text" name="area_of_specialization"
+                                        value="{{ faculty_status.AreaOfSpecialization }}">
+                                </td>
+                                <td>
+                                    <input type="text" name="designation"
+                                        value="{{ faculty_status.Designation }}">
+                                </td>
+                                <td>
+                                    <input type="date" name="date_of_joining"
+                                        value="{{ faculty_status.DateOfJoining|date:'Y-m-d' }}">
+                                </td>
+                                <td>
+                                    <input type="date" name="date_of_associate"
+                                        value="{{ faculty_status.DateDesignatedAsAssociate|date:'Y-m-d' }}">
+                                </td>
+                                <td>
+                                    <input type="date" name="date_of_professor"
+                                        value="{{ faculty_status.DateDesignatedAsProfessor|date:'Y-m-d' }}">
+                                </td>
+                                <td style="width: fit-content;">
+                                    <input type="text" name="currently_associate"
+                                        value="{{ faculty_status.CurrentlyAssociate }}" style="width: 50px;">
+                                </td>
+                                <td style="width: fit-content;">
+                                    <input type="text" name="nature_of_association"
+                                        value="{{ faculty_status.NatureOfAssociation }}" style="width: fit-content;">
+                                </td>
+                                <td style="width: fit-content;">
+                                    <input type="text" name="contract_type"
+                                        value="{{ faculty_status.ContractType }}" style="width: fit-content;">
+                                </td>
+                                <td>
+                                    <input type="date" name="date_of_leaving"
+                                        value="{{ faculty_status.DateOfLeaving|date:'Y-m-d' }}" style="width: fit-content;">
+                                </td> 
+                                <td class="action-column" style="width: 400px;">
+                                    <input type="hidden" name="faculty_id" value="{{ faculty_status.FacultyId }}">
+                                    <button type="submit" class="btn btn-primary" name="update_teacher" value="{{ faculty_status.FacultyId }}">Update</button>
+                                    <a href="{% url 'delete_teacher_status_idv' faculty_status.FacultyId  %}" class="btn btn-sm btn-danger" style="margin-left: 5px;"><i class="fa-solid fa-trash-can"></i></a>
+                                </td>  
+                            </tr>
+                            </form>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        
+
+    </div>
+</body>
+
+</html>

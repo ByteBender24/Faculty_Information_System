@@ -1,17 +1,20 @@
+from datetime import datetime
 from django.shortcuts import render
-from django.http import HttpResponse
 import csv
 from io import StringIO
 import json
-from django.http import JsonResponse
+from django.core.files.storage import FileSystemStorage
+import random
+import os
 from django.shortcuts import render, redirect
 from django.db import connection
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from .models import create_tables
 from django.contrib import messages
 from colorcode import Color, print_colored
-from django.core.files.storage import FileSystemStorage
-import random, os
+from django.http import FileResponse, Http404
+from django.shortcuts import get_object_or_404
+
 
 '''
 Functions and Views:
@@ -45,7 +48,7 @@ def return_admin():
                 data = cursor.fetchall()
                 return data
     except Exception as e:
-        print(f"Error executing SQL query: {e}")
+        print(f"Error executing |return_admin| SQL query: {e}")
 
 
 def return_faculty_credential():
@@ -59,7 +62,7 @@ def return_faculty_credential():
                 data = cursor.fetchall()
                 return data
     except Exception as e:
-        print(f"Error executing SQL query: {e}")
+        print(f"Error executing |return_faculty_credential| SQL query: {e}")
 
 
 def get_faculty_id(username):
@@ -74,7 +77,7 @@ def get_faculty_id(username):
                 data = cursor.fetchone()
                 return data
     except Exception as e:
-        print(f"Error executing SQL query: {e}")
+        print(f"Error executing |get_faculty_id| SQL query: {e}")
 
 
 def get_admin_id(username):
@@ -89,7 +92,7 @@ def get_admin_id(username):
                 data = cursor.fetchone()
                 return data
     except Exception as e:
-        print(f"Error executing SQL query: {e}")
+        print(f"Error executing |get_admin_id| SQL query: {e}")
 
 # -------------------------------------------------------------------------ID generators-----------------------------------------------------------------------------------------------------------
 def exp_id_generator():
@@ -291,7 +294,7 @@ def get_teacher_details(teacher_id):
                     }
                 return context
     except Exception as e:
-        print(f"Error executing SQL query: {e}")
+        print(f"Error executing |get_teacher_details| SQL query: {e}")
 
 
 def get_admin_details(admin_id):
@@ -310,7 +313,7 @@ def get_admin_details(admin_id):
                 }
                 return context
     except Exception as e:
-        print(f"Error executing SQL query: {e}")
+        print(f"Error executing |get_admin_details| SQL query: {e}")
 
 def get_certificate(teacher_id):
     certificate_query = f"""
@@ -337,7 +340,7 @@ def get_certificate(teacher_id):
                 certificate =  context
                 return certificate
     except Exception as e:
-        print(f"Error executing SQL query: {e}")
+        print(f"Error executing |get_certificate| SQL query: {e}")
 
 
 def get_conference(teacher_id):
@@ -366,7 +369,7 @@ def get_conference(teacher_id):
                 print_colored(conference)
                 return conference
     except Exception as e:
-        print(f"Error executing SQL query: {e}")
+        print(f"Error executing |get_conference| SQL query: {e}")
 
 
 def get_education(teacher_id):
@@ -394,7 +397,7 @@ def get_education(teacher_id):
 
                 return context
     except Exception as e:
-        print(f"Error executing SQL query: {e}")
+        print(f"Error executing |get_education| SQL query: {e}")
     
 def get_paper(teacher_id):
     paper = f"""
@@ -420,7 +423,7 @@ def get_paper(teacher_id):
 
                 return context
     except Exception as e:
-        print(f"Error executing SQL query: {e}")
+        print(f"Error executing |get_paper| SQL query: {e}")
 
 
 def get_patent(teacher_id):
@@ -447,7 +450,7 @@ def get_patent(teacher_id):
 
                 return context
     except Exception as e:
-        print(f"Error executing SQL query: {e}")
+        print(f"Error executing |get_patent| SQL query: {e}")
 
 def get_workexp(teacher_id):
     WorkExperience = f"""
@@ -473,7 +476,7 @@ def get_workexp(teacher_id):
 
                 return context
     except Exception as e:
-        print(f"Error executing SQL query: {e}")
+        print(f"Error executing |get_workexp| SQL query: {e}")
 
 def get_salary(teacher_id):
     salary = f"""
@@ -499,7 +502,7 @@ def get_salary(teacher_id):
 
                 return context
     except Exception as e:
-        print(f"Error executing SQL query: {e}")
+        print(f"Error executing |get_salary| SQL query: {e}")
 
 def get_teaching(teacher_id):
     teaching = f"""
@@ -528,7 +531,7 @@ def get_teaching(teacher_id):
                 print_colored(context, color=Color.RED)
                 return context
     except Exception as e:
-        print(f"Error executing SQL query: {e}")
+        print(f"Error executing |get_teaching| SQL query: {e}")
         
 def get_faculty_by_gender(gender = 'Male', sort=None):
     raw_sql_query = f"""
@@ -553,7 +556,7 @@ def get_faculty_by_gender(gender = 'Male', sort=None):
                     context.append(faculty_dict)
                 return context
     except Exception as e:
-        print(f"Error executing SQL query: {e}")
+        print(f"Error executing |get_faculty_by_gender| SQL query: {e}")
         return []
     
 def get_all_faculties(sort=None):
@@ -580,7 +583,7 @@ def get_all_faculties(sort=None):
                     context.append(faculty_dict)
                 return context
     except Exception as e:
-        print(f"Error executing SQL query: {e}")
+        print(f"Error executing |get_all_faculties| SQL query: {e}")
         return []
 
 def selected_faculties(id, sort=None):
@@ -604,7 +607,7 @@ def selected_faculties(id, sort=None):
                 
                 return context
     except Exception as e:
-        print(f"Error executing SQL query: {e}")
+        print(f"Error executing |selected_faculties| SQL query: {e}")
 
 def selected_faculties_by_name(name, sort=None):
     raw_sql_query = f"""
@@ -630,7 +633,7 @@ def selected_faculties_by_name(name, sort=None):
                     context.append(dict(zip(keys_tuple, datum)))
                 return context
     except Exception as e:
-        print(f"Error executing SQL query: {e}")
+        print(f"Error executing |selected_faculties_by_name| SQL query: {e}")
 
 # -------------------------------------------------------------------------teacher dashboard and view_teacher-----------------------------------------------------------------------------------------------------------
 def teacher_dashboard(request, teacher_id):
@@ -1211,7 +1214,7 @@ def gender_report():
         return (context, male_data, female_data)
             
     except Exception as e:
-        print(f"Error executing SQL query: {e}")
+        print(f"Error executing |gender_report| SQL query: {e}")
 
 
 def department_join_report(request):
@@ -1251,7 +1254,7 @@ def department_join_report(request):
             cursor.execute(department_sql)
             department_data = dict_fetchall(cursor)
     except Exception as e:
-        print(f"Error executing SQL query: {e}")
+        print(f"Error executing |dept_report| SQL query: {e}")
 
     # Fetch average experience data
     try:
@@ -1259,7 +1262,7 @@ def department_join_report(request):
             cursor.execute(avg_experience_sql)
             avg_experience_data = dict_fetchall(cursor)
     except Exception as e:
-        print(f"Error executing SQL query: {e}")
+        print(f"Error executing |avg_exp| SQL query: {e}")
 
     # Fetch all people data
     try:
@@ -1267,7 +1270,7 @@ def department_join_report(request):
             cursor.execute(all_people_sql)
             all_people_data = dict_fetchall(cursor)
     except Exception as e:
-        print(f"Error executing SQL query: {e}")
+        print(f"Error executing |all_people_data=avg_exp+dept_data| SQL query: {e}")
 
     # Filter all people data based on the department if a department is specified
     if request.method == "POST":
@@ -1281,11 +1284,6 @@ def department_join_report(request):
         'avg_experience_data': avg_experience_data,
         'all_people_data': all_people_data,
     }
-
-    print_colored(context['department_data'], color=Color.RED)
-    print_colored(context['avg_experience_data'], color=Color.BLUE)
-    print_colored(context['all_people_data'], color=Color.GREEN)
-
 
     return render(request, 'report_department.html', context)
 
@@ -1347,7 +1345,9 @@ def insert_faculty_data(file_content, file_format):
 
             # Iterate over rows in the data and append values to the SQL query
             for row in csv_reader:
-                values = f"({row['FacultyID']}, '{row['FirstName']}', '{row['LastName']}', '{row['DateOfBirth']}', '{row['Gender']}', '{row['ContactNumber']}', '{row['Email']}', '{row['Address']}'),"
+                date_of_birth = datetime.strptime(
+                    row['DateOfBirth'], '%d-%m-%Y').strftime('%Y-%m-%d')
+                values = f"({row['FacultyID']}, '{row['FirstName']}', '{row['LastName']}', '{date_of_birth}', '{row['Gender']}', '{row['ContactNumber']}', '{row['Email']}', '{row['Address']}'),"
                 sql_query += values
 
             # Remove the trailing comma
@@ -1362,7 +1362,7 @@ def insert_faculty_data(file_content, file_format):
             print("Data inserted successfully.")
 
     except Exception as e:
-        print(f"Error executing SQL query: {e}")
+        print(f"Error executing |csv_all_faculties_data_basic| SQL query: {e}")
 
 
 
@@ -1403,7 +1403,7 @@ def return_faculty():
                 data = cursor.fetchall()
                 return data
     except Exception as e:
-        print(f"Error executing SQL query: {e}")
+        print(f"Error executing |select * from faculty| SQL query: {e}")
 
 
 def generate_csv(request):
@@ -1424,3 +1424,380 @@ def generate_csv(request):
 
 def download_csv_page(request):
     return render(request, 'download_csv_page.html')
+
+
+def add_faculty_status_from_csv(request):
+    admin_id_login = request.session.get('admin_id')
+    admin_id_login = 1234
+    print_colored(admin_id_login)
+
+    if request.method == 'POST':
+        # Get the uploaded file from the request
+        uploaded_file = request.FILES.get('file_upload')
+
+        # Check if a file is provided
+        if uploaded_file:
+            # Read the content of the file
+            file_content = uploaded_file.read().decode('utf-8')
+
+            # Create a CSV reader
+            csv_reader = csv.DictReader(StringIO(file_content))
+
+            # Iterate over rows in the CSV and add data to the database
+            for row in csv_reader:
+                try:
+                    print_colored(row, color=Color.RED)
+                    # Construct and execute raw SQL query
+                    raw_sql_query = f"""
+                        INSERT INTO FacultyStatus (FacultyId, AreaOfSpecialization, Designation, DateOfJoining,
+                        DateDesignatedAsAssociate, DateDesignatedAsProfessor, CurrentlyAssociate, NatureOfAssociation, ContractType, DateOfLeaving)
+                        VALUES (
+                            '{row['faculty_id']}',
+                            '{row['area_of_specialization']}',
+                            '{row['designation']}',
+                            '{row['date_of_joining']}',
+                            '{row['date_of_associate']}',
+                            {f'"{row["date_of_professor"]}"' if 'date_of_professor' in row and row['date_of_professor'] else 'NULL'},
+                            {1 if row['currently_associate'] == 'Yes' else 0},
+                            '{row['nature_of_association']}',
+                            {f'"{row["contract_type"]}"' if 'contract_type' in row and row['contract_type'] else 'NULL'},
+                            {f'"{row["date_of_leaving"]}"' if 'date_of_leaving' in row and row['date_of_leaving'] else 'NULL'}
+                        );
+                    """
+
+                    with connection.cursor() as cursor:
+                        cursor.execute(raw_sql_query)
+
+                except Exception as e:
+                    # Handle any exceptions or validation errors
+                    print(f"Error adding data: {e}")
+
+            # Redirect or render a success page
+            return render(request, 'upload_csv.html', {'admin_id_login': admin_id_login})
+
+    # Render the upload form
+    return render(request, 'upload_csv.html', {'admin_id_login': admin_id_login})
+
+
+def update_faculty_status(request):
+    admin_id_login = request.session.get('admin_id')
+    admin_id_login = 1234
+
+    with connection.cursor() as cursor:
+        cursor.execute('SELECT * FROM FacultyStatus')
+        faculty_statuses = dictfetchall(cursor)
+
+    if request.method == 'POST':
+        print_colored(request.POST, color=Color.BLUE)
+        # Get the form data from the request
+        faculty_id = request.POST.get('faculty_id')
+        area_of_specialization = request.POST.get('area_of_specialization')
+        designation = request.POST.get('designation')
+        date_of_joining = request.POST.get('date_of_joining')
+        date_of_associate = request.POST.get('date_of_associate')
+        date_of_professor = request.POST.get('date_of_professor')
+        currently_associate = request.POST.get('currently_associate')
+        nature_of_association = request.POST.get('nature_of_association')
+        contract_type = request.POST.get('contract_type')
+        date_of_leaving = request.POST.get('date_of_leaving')
+
+        # Convert date strings to date objects or set to None if empty or 'None'
+        date_of_joining = datetime.strptime(date_of_joining, '%Y-%m-%d').date(
+        ) if date_of_joining and date_of_joining.lower() != 'none' else None
+        date_of_associate = datetime.strptime(date_of_associate, '%Y-%m-%d').date(
+        ) if date_of_associate and date_of_associate.lower() != 'none' else None
+        date_of_professor = datetime.strptime(date_of_professor, '%Y-%m-%d').date(
+        ) if date_of_professor and date_of_professor.lower() != 'none' else None
+        currently_associate = int(
+            currently_associate) if currently_associate and currently_associate.lower() != 'none' else None
+        date_of_leaving = datetime.strptime(date_of_leaving, '%Y-%m-%d').date(
+        ) if date_of_leaving and date_of_leaving.lower() != 'none' else None
+
+        # Update the FacultyStatus table using SQL queries
+        with connection.cursor() as cursor:
+            cursor.execute('''
+                UPDATE FacultyStatus
+                SET AreaOfSpecialization = %s,
+                    Designation = %s,
+                    DateOfJoining = %s,
+                    DateDesignatedAsAssociate = %s,
+                    DateDesignatedAsProfessor = %s,
+                    CurrentlyAssociate = %s,
+                    NatureOfAssociation = %s,
+                    ContractType = %s,
+                    DateOfLeaving = %s
+                WHERE FacultyId = %s
+            ''', [area_of_specialization, designation, date_of_joining,
+                  date_of_associate, date_of_professor, currently_associate,
+                  nature_of_association, contract_type, date_of_leaving, faculty_id])
+
+        # Redirect to the faculty details page or any other appropriate page
+        return render(request, 'update_teacher_status.html', {'faculty_statuses': faculty_statuses, 'admin_id_login': admin_id_login})
+
+    else:
+        # Retrieve the current faculty status using SQL queries
+        return render(request, 'update_teacher_status.html', {'faculty_statuses': faculty_statuses, 'admin_id_login': admin_id_login})
+
+def dictfetchall(cursor):
+    columns = [col[0] for col in cursor.description]
+    return [dict(zip(columns, row)) for row in cursor.fetchall()]
+
+def update_faculty_status_idv(request, faculty_id):
+    admin_id_login = request.session.get('admin_id')
+    admin_id_login = 1234
+
+
+    print_colored(request.POST, color=Color.BLUE)
+        # Get the form data from the request
+    faculty_id_new = faculty_id
+    print_colored(faculty_id_new)
+    area_of_specialization = request.POST.get('area_of_specialization')
+    designation = request.POST.get('designation')
+    date_of_joining = request.POST.get('date_of_joining')
+    date_of_associate = request.POST.get('date_of_associate')
+    date_of_professor = request.POST.get('date_of_professor')
+    currently_associate = request.POST.get('currently_associate')
+    nature_of_association = request.POST.get('nature_of_association')
+    contract_type = request.POST.get('contract_type')
+    date_of_leaving = request.POST.get('date_of_leaving')
+
+
+        # Convert date strings to date objects or set to None if empty or 'None'
+    date_of_joining = datetime.strptime(date_of_joining, '%Y-%m-%d').date(
+    ) if date_of_joining and date_of_joining.lower() != 'none' else None
+    date_of_associate = datetime.strptime(date_of_associate, '%Y-%m-%d').date(
+    ) if date_of_associate and date_of_associate.lower() != 'none' and date_of_associate != '' else None
+    date_of_professor = datetime.strptime(date_of_professor, '%Y-%m-%d').date(
+    ) if date_of_professor and date_of_professor.lower() != 'none' and date_of_professor != '' else None
+    currently_associate = int(
+        currently_associate) if currently_associate and currently_associate.lower() != 'none' else None
+    date_of_leaving = datetime.strptime(date_of_leaving, '%Y-%m-%d').date(
+    ) if date_of_leaving and date_of_leaving.lower() != 'none' else None
+
+    print_colored(date_of_associate, date_of_joining, date_of_leaving,
+                date_of_professor, currently_associate)
+
+    # Update the FacultyStatus table using SQL queries
+    with connection.cursor() as cursor:
+        cursor.execute('''
+            UPDATE FacultyStatus
+            SET AreaOfSpecialization = %s,
+                Designation = %s,
+                DateOfJoining = %s,
+                DateDesignatedAsAssociate = %s,
+                DateDesignatedAsProfessor = %s,
+                CurrentlyAssociate = %s,
+                NatureOfAssociation = %s,
+                ContractType = %s,
+                DateOfLeaving = %s
+            WHERE FacultyId = %s
+        ''', [area_of_specialization, designation, date_of_joining,
+            date_of_associate, date_of_professor, currently_associate,
+            nature_of_association, contract_type, date_of_leaving, faculty_id_new])
+
+    with connection.cursor() as cursor:
+        cursor.execute('SELECT * FROM FacultyStatus')
+        faculty_statuses = dictfetchall(cursor)
+
+    # Redirect to the faculty details page or any other appropriate page
+    return render(request, 'update_teacher_status.html', {'faculty_statuses': faculty_statuses, 'admin_id_login': admin_id_login})
+
+
+def delete_teacher_status_idv(request, faculty_id):
+    admin_id_login = request.session.get('admin_id')
+    admin_id_login = 1234
+
+    raw_sql_query = f'''
+    Delete From facultystatus
+    Where FacultyID = {faculty_id};
+    '''
+
+    with connection.cursor() as cursor:
+        cursor.execute(raw_sql_query)
+    
+    with connection.cursor() as cursor:
+        cursor.execute('SELECT * FROM FacultyStatus')
+        faculty_statuses = dictfetchall(cursor)
+
+    return render(request, 'update_teacher_status.html', {'faculty_statuses': faculty_statuses, 'admin_id_login': admin_id_login})
+
+
+def faculty_stats_view(request):
+    with connection.cursor() as cursor:
+        # Get the number of associate professors
+        cursor.execute(
+            'SELECT COUNT(*) FROM FacultyStatus WHERE Designation = %s', ['Associate Professor'])
+        num_associate_professors = cursor.fetchone()[0]
+        cursor.execute(
+            'SELECT COUNT(*) FROM FacultyStatus WHERE Designation = %s', ['Assistant Professor'])
+        num_assistant_professors = cursor.fetchone()[0]
+        # Get the number of professors
+        cursor.execute(
+            'SELECT COUNT(*) FROM FacultyStatus WHERE Designation = %s', ['Professor'])
+        num_professors = cursor.fetchone()[0]
+
+    start_date = end_date = None
+    professors_present = []
+    
+    if request.method == 'POST':
+        start_date_str = request.POST.get('start_date')
+        end_date_str = request.POST.get('end_date')
+        # Check if start_date_str and end_date_str are not None
+        if start_date_str is not None and end_date_str is not None:
+            # Convert date strings to datetime objects
+            start_date = datetime.strptime(start_date_str, '%Y-%m-%d')
+            end_date = datetime.strptime(end_date_str, '%Y-%m-%d')
+
+            # Run SQL queries to get faculty statistics
+            with connection.cursor() as cursor:
+                # Get the list of professors present during the specified date range
+                cursor.execute('''
+                    SELECT Faculty.FacultyId, Faculty.FirstName, Faculty.LastName, FacultyStatus.Designation
+                    FROM Faculty
+                    INNER JOIN FacultyStatus ON Faculty.FacultyId = FacultyStatus.FacultyId
+                    WHERE FacultyStatus.DateOfJoining >= %s
+                        AND (FacultyStatus.DateOfLeaving IS NULL OR FacultyStatus.DateOfLeaving <= %s)
+                ''', [start_date_str, end_date_str])
+                professors_present = dictfetchall(cursor)
+                print_colored(professors_present, color=Color.RED) 
+
+        return render(request, 'faculty_stats_view.html', {'num_associate_professors': num_associate_professors, 'num_assistant_professors': num_assistant_professors,'num_professors': num_professors,'professors_present': professors_present
+        })
+    
+    if request.method == "GET":
+        return render(request, 'faculty_stats_view.html', {'num_associate_professors': num_associate_professors, 'num_assistant_professors': num_assistant_professors,'num_professors': num_professors,'professors_present': professors_present})
+
+
+
+def dictfetchall(cursor):
+    columns = [col[0] for col in cursor.description]
+    return [dict(zip(columns, row)) for row in cursor.fetchall()]
+
+def view_profile(request, faculty_id):
+    context = get_teacher_details(faculty_id)
+    context['profile_img'] = get_profile_img(faculty_id)
+    context['certificates'] = get_certificate_url(faculty_id)
+    print_colored(context, color=Color.GREEN)
+    return render(request, 'profile.html', context)
+
+def certificate_list(request, faculty_id):
+    context = get_teacher_details(faculty_id)
+    context['profile_img'] = get_profile_img(faculty_id)
+    context['certificates'] = get_certificate_url(faculty_id)
+    return render(request, 'profile.html', context)
+
+
+def update_faculty_profile(request, faculty_id):
+
+    if request.method == "GET":
+        context = get_teacher_details(faculty_id)
+        context['profile_img'] = get_profile_img(faculty_id)
+        context['certificates'] = get_certificate_url(faculty_id)
+        return render(request, 'profile.html', context)
+
+    if request.method == "POST":
+        update_faculty_in_database(request.POST, faculty_id)
+        context = get_teacher_details(faculty_id)
+        context['profile_img'] = get_profile_img(faculty_id)
+        context['certificates'] = get_certificate_url(faculty_id)
+        return render(request, 'profile.html', context)
+
+
+def update_profile_image(request, faculty_id):
+    
+    if request.method == 'POST':
+        profile_image = request.FILES.get('profile_image')
+        print_colored(profile_image, color=Color.BLUE)
+        # Save the image to the media folder
+        if profile_image:
+            media_path = os.path.abspath(f'static/img/{faculty_id}_{profile_image.name}')
+            with open(media_path, 'wb+') as destination:
+                for chunk in profile_image.chunks():
+                    destination.write(chunk)
+            
+            # Update the database with the image URL
+            with connection.cursor() as cursor:
+                cursor.execute("UPDATE faculty SET profile_img = %s WHERE facultyid = %s", [
+                            media_path, faculty_id])
+
+            context = get_teacher_details(faculty_id)
+            context['profile_img'] = get_profile_img(faculty_id)
+            context['certificates'] = get_certificate_url(faculty_id)
+
+            print_colored(context, color=Color.GREEN)
+            return render(request, 'profile.html', context)
+
+    context = get_teacher_details(faculty_id)
+    context['profile_img'] = get_profile_img(faculty_id)
+    context['certificates'] = get_certificate_url(faculty_id)
+
+    print_colored(context, color=Color.RED)
+
+    return render(request, 'profile.html', context)
+
+
+def get_profile_img(faculty_id):
+    with connection.cursor() as cursor:
+        cursor.execute(
+            "SELECT profile_img FROM faculty WHERE facultyid = %s", [faculty_id])
+        row = cursor.fetchone()
+        print_colored(row)
+        if row:
+            return row[0]  # Return the profile_img
+        else:
+            return None  # No matching faculty ID found
+
+
+def view_certificate(request, faculty_id, certificate_id):
+    with connection.cursor() as cursor:
+        cursor.execute(
+            "SELECT filePath FROM certificate WHERE facultyid = %s AND certid = %s", [faculty_id, certificate_id])
+        row = cursor.fetchone()
+
+    # Check if the file path exists
+    if row and row[0]:
+        file_path = row[0]
+        try:
+            # Open the file in binary mode
+            with open(file_path, 'rb') as file:
+                # Create an HttpResponse with the file content
+                response = HttpResponse(
+                    file.read(), content_type='application/pdf')
+
+                # Set the Content-Disposition header for force download
+                response[
+                    'Content-Disposition'] = f'attachment; filename="{file_path.split("/")[-1]}"'
+
+                return response
+        except FileNotFoundError:
+            # Raise Http404 if the file is not found
+            raise Http404("File not found")
+    else:
+        # Raise Http404 if the file path is not available
+        raise Http404("File path not available")
+
+def get_certificate_url(teacher_id):
+    certificate_query = f"""
+    SELECT CertID, CertificateName, Filepath
+    FROM CERTIFICATE
+    WHERE FacultyID = '{teacher_id} '
+    """
+
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute(certificate_query)
+            if cursor.description:
+                data = cursor.fetchall()
+                context = []
+                for datum in data:
+                    dict_temp = {
+                        'certID': datum[0],
+                        'name': datum[1],
+                        'path' : datum[2]
+                    }
+                    context.append(dict_temp)
+                certificate = context
+                print_colored(certificate)
+                return certificate
+    except Exception as e:
+        print(f"Error executing |get_certificate_url| SQL query: {e}")

@@ -100,8 +100,8 @@
 <nav class="navbar navbar-light bg-light">
     <a class="navbar-brand" href="{% url 'login' %}">Logout</a>
 
-    <a class="navbar-brand" href="#profile">Profile</a>
-    <a class="navbar-brand" href="#details">Details</a>
+    <a class="navbar-brand" href="{% url 'view_profile' teacher_id%}">Profile</a>
+    <a class="navbar-brand" href="{% url 'view_profile' teacher_id%}">Details</a>
     <!-- Add more navigation links as needed -->
 </nav>
 
@@ -109,7 +109,10 @@
     <div class="profile-container">
         <h2>{{ first_name }}</h2>
         <p>Email: {{ email }}</p>
-        <!-- Add more profile details as needed -->
+        <a href="{% url 'view_profile' teacher_id%}" class="btn btn-secondary">Profile</a>
+        <a href="{% url 'certificate_list' teacher_id %}" class="btn btn-warning">Certificates</a>
+
+        
     </div>
 
     <div class="summary-container">
@@ -118,8 +121,8 @@
         <p>Recent Activity:</p>
         <ul class="recent-activity">
             <li>Uploaded document "Project Report"</li>
-            <!-- Add more recent activities as needed -->
         </ul>
+
     </div>
 
     <div class="details-container">

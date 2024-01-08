@@ -1,6 +1,11 @@
 from django.db import models, connection
 
-# Create your models here.
+'''
+These functions should be run first time, to create tables and contraints, 
+and make sure you comment these after so that no error shows up
+
+If these functions not work, copy and paste these queries manually into MySQL workspace, and make sure you create these tables and contraints before working'''
+
 
 
 def create_tables():
@@ -117,6 +122,35 @@ CREATE TABLE Teaching (
     LeavesAllotted INT,
     FOREIGN KEY (FacultyID) REFERENCES Faculty(FacultyID)
 );
+
+-- These should be done so that, there is a reference between departments and teachers present there, 
+make sure you do it, based on the tables you have or remove them if not needed
+-- Also use different INSERT INTO commands (other than that given below here)
+
+CREATE TABLE Department (
+    DepartmentID INT PRIMARY KEY AUTO_INCREMENT,
+    Location VARCHAR(50),
+    DepartmentName VARCHAR(50) UNIQUE
+);
+
+-- Insert into Department table with random locations
+INSERT INTO Department (DepartmentName, Location) VALUES ('Electrical Engineering', 'Building A');
+INSERT INTO Department (DepartmentName, Location) VALUES ('Computer Science', 'Tech Center');
+INSERT INTO Department (DepartmentName, Location) VALUES ('Biology', 'Science Building');
+INSERT INTO Department (DepartmentName, Location) VALUES ('Chemistry', 'Lab Complex');
+INSERT INTO Department (DepartmentName, Location) VALUES ('Mathematics', 'Mathematics Wing');
+INSERT INTO Department (DepartmentName, Location) VALUES ('Physics', 'Physics Hall');
+INSERT INTO Department (DepartmentName, Location) VALUES ('Psychology', 'Psychology Department');
+INSERT INTO Department (DepartmentName, Location) VALUES ('Mechanical Engineering', 'Engineering Block');
+INSERT INTO Department (DepartmentName, Location) VALUES ('Information Technology', 'IT Tower');
+INSERT INTO Department (DepartmentName, Location) VALUES ('Computer Engineering', 'Engineering Block');
+INSERT INTO Department (DepartmentName, Location) VALUES ('Civil Engineering', 'Civil Engineering Complex');
+
+ALTER TABLE Teaching
+ADD CONSTRAINT FK_Teaching_Department
+FOREIGN KEY (DepartmentName) REFERENCES Department(DepartmentName);
+
+
     """
     try:
         with connection.cursor() as cursor:
@@ -135,7 +169,9 @@ def alter_table_files():
     raw_sql_query = """
     -- Alter Certificate table to add FilePath column
     ALTER TABLE Certificate
-    ADD COLUMN FilePath VARCHAR(255) NULL;"""
+    ADD COLUMN FilePath VARCHAR(255) NULL;
+    
+    """
     try:
         with connection.cursor() as cursor:
             cursor.execute(raw_sql_query)
@@ -235,6 +271,97 @@ SELECT * FROM credential WHERE FacultyID = 2443;
 
 -- Clean up
 DELETE FROM faculty WHERE FacultyID = 2443;
+
+"""
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute(raw_sql_query)
+            if cursor.description:
+                data = cursor.fetchall()
+                print(data)
+                return data
+    except Exception as e:
+        print(f"Error executing SQL query: {e}")
+
+
+def check_phone_num():
+    raw_sql_query = """
+-- CHECK CONSTRAINT FOR PHONE NUMBER
+ALTER TABLE Faculty
+ADD CONSTRAINT chk_mobile_number
+CHECK (CHAR_LENGTH(ContactNumber) = 10 AND ContactNumber NOT REGEXP '[^0-9]');
+
+"""
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute(raw_sql_query)
+            if cursor.description:
+                data = cursor.fetchall()
+                print(data)
+                return data
+    except Exception as e:
+        print(f"Error executing SQL query: {e}")
+
+def current_status_sql():
+    raw_sql_query = """
+    -- Create FacultyStatus table
+CREATE TABLE FacultyStatus (
+    FacultyId INT,
+    AreaOfSpecialization VARCHAR(255),
+    Designation VARCHAR(255),
+    DateOfJoining DATE,
+    DateDesignatedAsAssociate DATE,
+    DateDesignatedAsProfessor DATE,
+    CurrentlyAssociate BOOLEAN,
+    NatureOfAssociation VARCHAR(50),
+    ContractType VARCHAR(50),
+    DateOfLeaving DATE,
+    -- Add other columns as needed
+
+    -- Add foreign key constraint
+    CONSTRAINT FK_FacultyId
+    FOREIGN KEY (FacultyId)
+    REFERENCES Faculty(FacultyId),
+
+    CONSTRAINT PK_faculty_status PRIMARY KEY (FacultyID)
+);
+
+-- Add CHECK constraints
+ALTER TABLE FacultyStatus
+ADD CONSTRAINT CK_NatureOfAssociation
+CHECK (NatureOfAssociation IN ('Full-Time', 'Part-Time', 'Adjunct'));
+
+ALTER TABLE FacultyStatus
+ADD CONSTRAINT CK_ContractType
+CHECK (NatureOfAssociation <> 'Contract' OR ContractType IN ('Permanent', 'Contract'));
+
+-- Add CHECK constraint for DateOfLeaving
+ALTER TABLE FacultyStatus
+ADD CONSTRAINT CK_DateOfLeaving
+CHECK (
+    (NatureOfAssociation <> 'No' AND DateOfLeaving IS NOT NULL)
+    OR (NatureOfAssociation = 'No' AND DateOfLeaving IS NULL)
+);
+
+
+"""
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute(raw_sql_query)
+            if cursor.description:
+                data = cursor.fetchall()
+                print(data)
+                return data
+    except Exception as e:
+        print(f"Error executing SQL query: {e}")
+
+
+def profile_img_sql():
+    raw_sql_query = """
+    -- add profile photo url
+    ALTER TABLE faculty
+ADD COLUMN profile_img VARCHAR(255);
+
 """
     try:
         with connection.cursor() as cursor:

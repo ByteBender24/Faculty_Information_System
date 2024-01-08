@@ -1,0 +1,189 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-alpha1/dist/js/bootstrap.bundle.min.js" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link rel="icon" href="{% static 'img/icon.png' %}">
+    <style>
+        body {
+            background: rgb(99, 39, 120)
+        }
+
+        .form-control:focus {
+            box-shadow: none;
+            border-color: #BA68C8
+        }
+
+        .profile-button {
+            background: rgb(99, 39, 120);
+            box-shadow: none;
+            border: none
+        }
+
+        .profile-button:hover {
+            background: #682773
+        }
+
+        .profile-button:focus {
+            background: #682773;
+            box-shadow: none
+        }
+
+        .profile-button:active {
+            background: #682773;
+            box-shadow: none
+        }
+
+        .back:hover {
+            color: #682773;
+            cursor: pointer
+        }
+
+        .labels {
+            font-size: 11px
+        }
+
+        .add-experience:hover {
+            background: #BA68C8;
+            color: #fff;
+            cursor: pointer;
+            border: solid 1px #BA68C8
+        }
+
+        .profile-pic:hover {
+            cursor: pointer;
+        }
+
+        #file-input {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container rounded bg-white mt-5 mb-5">
+        
+        <div class="row">
+            
+            <div class="col-md-3 border-right">
+                <div class="d-flex flex-column align-items-center text-center p-3 py-5">
+        <a class="btn btn-danger" href="javascript:history.back()">Back</a>
+
+                    <form method="POST" action="{% url 'update_profile_image' teacher_id %}" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <label for="file-input" class="profile-pic">
+                        <img id="profile-image" class="rounded-circle mt-5" width="150px" src=" {% if not profile_img %} https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg {% else %} {% static '{{ profile_img }}' %} {% endif %}" alt="Profile Picture">
+                        <br>
+                    </label>
+                    <input id="file-input" type="file" name="profile_image" accept="image/*" style="display:none" onchange="previewImage(this)">
+                    <br>
+                    <span class="font-weight-bold">{{ first_name }} {{last_name}}</span><br><span class="text-black-50">{{ email }}</span><span> </span>
+                    <br>
+                    <button class="btn btn-secondary" type="submit">Save photo</button>
+                    </form>
+                    <br><br><br>
+                    <button type="button" class="btn btn-primary" onclick="viewProfileImage()">View Profile Image</button>
+                </div>
+            </div>
+            <div class="col-md-5 border-right">
+                <!-- Profile Section -->
+                <form method="POST" action="{% if teacher_id %}{% url 'update_faculty_profile' teacher_id %}{% endif %}" >
+                    {% csrf_token %}
+                <div class="p-3 py-5">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h4 class="text-right">Profile Settings</h4>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-md-6"><label for="first_name" class="form-label">First Name</label>
+                        <input autocomplete="off" type="text" class="form-control" id="first_name" name="first_name" value="{{ first_name }}" required></div>
+                        <div class="col-md-6"> <label for="last_name" class="form-label">Last Name</label>
+                        <input autocomplete="off" type="text" class="form-control" id="last_name" name="last_name" value="{{ last_name }}" required></div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-6"><label for="date_of_birth" class="form-label">Date of Birth</label>
+                        <input autocomplete="off" type="date" class="form-control" id="date_of_birth" name="date_of_birth" value="{{ dob|date:'Y-m-d' }}" required></div>
+                        <div class="col-md-6"><label for="gender" class="labels">Gender</label>
+                        <select class="form-select" id="gender" name="gender" required>
+                            <option value="Male" {% if gender == 'Male' %}selected{% endif %}>Male</option>
+                            <option value="Female" {% if gender == 'Female' %}selected{% endif %}>Female</option>
+                        </select></div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-6"><label for="contact_number" class="form-label">Contact Number</label>
+                        <input autocomplete="off" type="tel" class="form-control" id="contact_number" name="contact_number" value="{{ phone }}" required></div>
+                        <div class="col-md-6"><label for="email" class="form-label">Email</label>
+                        <input autocomplete="off" type="email" class="form-control" id="email" name="email" value="{{ email }}" required></div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-6"><label for="address" class="form-label">Address</label>
+                        <textarea class="form-control" id="address" name="address" rows="3" required>{{ address }}</textarea></div>
+                    </div>
+                    <div class="mt-5 text-center"><button class="btn btn-primary profile-button" type="submit">Save Profile</button></div>
+                </div>
+            </form>
+                <!-- Change Username and Password Section -->
+                <div class="p-3 py-5">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h4 class="text-right">Change Username and Password</h4>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-md-6"><label class="labels">New Username</label><input type="text" name="username_new" class="form-control" placeholder="enter new username" value=""></div>
+                        <div class="col-md-6"><label class="labels">New Password</label><input type="password" class="form-control" name="username_new" value="" placeholder="enter new password"></div>
+                    </div>
+                    <div class="mt-5 text-center"><button class="btn btn-primary profile-button" type="button">Save Changes</button></div>
+                </div>
+            </div>
+            <div class="col-md-4">
+    <div class="p-3 py-5">
+        <div class="d-flex justify-content-between align-items-center experience">
+            <h4>Certificates</h4>
+        </div>
+        <br>
+        <div class="list-group">
+            {% for certificate in certificates %}
+                <a href="{% url 'view_certificate' faculty_id=teacher_id certificate_id=certificate.certID %}" class="list-group-item list-group-item-action" target="_blank">
+                    <div class="d-flex w-100 justify-content-between">
+                        <h5 class="mb-1">{{ certificate.name }}</h5>
+                    </div>
+                    <small>Download here</small>
+                </a>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+        </div>
+    </div>
+    <script>
+        function previewImage(input) {
+            var file = input.files[0];
+            if (file) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    document.getElementById('profile-image').src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function viewProfileImage() {
+        var imageUrl = "{% if not profile_img %}https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg{% else %}{% static profile_img %}{% endif %}";
+
+        // Open a new window
+        var newWindow = window.open(imageUrl, "_blank");
+
+        // Check if the new window has been blocked by the browser
+        if (!newWindow || newWindow.closed || typeof newWindow.closed == 'undefined') {
+            alert('The popup window has been blocked by the browser. Please allow popups for this site.');
+        }
+    }
+    </script>
+</body>
+
+</html>

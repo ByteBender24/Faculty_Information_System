@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Faculty Statistics</title>
+    <!-- Add Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+
+         body {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url("/static/img/school.jpg");
+    color: rgb(253, 253, 253);
+  height: 100%;
+
+  background-position: center;
+    background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
+}
+
+td, tr {
+    color:aqua
+}
+
+    </style>
+</head>
+
+<body>
+        <a class="btn btn-danger" href="javascript:history.back()">Back</a>
+
+    <div class="container mt-5">
+        <h2>Faculty Statistics</h2>
+        
+        <form method="POST" action="{% url 'faculty_stats_view' %}">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="start_date" class="form-label">Start Date:</label>
+                <input type="date" class="form-control" id="start_date" name="start_date" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="end_date" class="form-label">End Date:</label>
+                <input type="date" class="form-control" id="end_date" name="end_date" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Filter</button>
+        </form>
+
+        <hr>
+
+        <h3>Faculty Status:</h3>
+        <p>Number of Associate Professors: {{ num_associate_professors }}</p>
+        <p>Number of Assistant Professors: {{ num_assistant_professors }}</p>
+        <p>Number of Professors: {{ num_professors }}</p>
+
+        <hr>
+
+        <h3>Professors Present:</h3>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Designation</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for professor in professors_present %}
+                    <tr>
+                        <td>{{ professor.FacultyId }}</td>
+                        <td>{{ professor.FirstName }} {{ professor.LastName }}</td>
+                        <td>{{ professor.Designation }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+
+</html>
