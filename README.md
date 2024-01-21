@@ -36,8 +36,6 @@ The Faculty Information System (FIS) is a comprehensive solution designed to eff
    ```bash
    git clone https://github.com/ByteBender24/Faculty_Information_System.git
 
-# Faculty Information System (FIS)
-
 ## Project Setup Instructions
 
 ### 1. Install Dependencies:
