@@ -48,12 +48,6 @@ pip install -r requirements.txt
 * Create a MySQL database
 * Update the database configurations in _settings.py_
 
-
-### 2. Database Setup:
-
--   Create a PostgreSQL database.
--   Update the database configurations in `settings.py`.
-
 ### 3. Run Migrations:
 
 `python manage.py migrate` 
