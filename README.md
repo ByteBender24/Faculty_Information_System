@@ -63,7 +63,7 @@ Visit the application at [http://localhost:8000](http://localhost:8000/) in your
 
 Login Credentials:
 * Admin Login - admin - 0000
-* Teacher Login - varsha - 0000
+* Teacher Login - varsha - 1234
 ```sql
 Use database_name;
 Select * from Credential;
