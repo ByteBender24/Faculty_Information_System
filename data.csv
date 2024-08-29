@@ -1,0 +1,6 @@
+FacultyID,FirstName,LastName,DateOfBirth,Gender,ContactNumber,Email,Address
+10023,Kira,Yoshikage,01-01-1990,Male,1618033984,kira.yoshikage@example.com,"7-11-11, Morioh Town, Japan"
+10024,Joseph,Joestar,27-06-1938,Male,1618033985,joseph.joestar@example.com,"123 Hamon Street, New York, USA"
+10025,Dio,Brando,15-05-1968,Male,1618033986,dio.brando@example.com,"666 Castle Road, London, UK"
+10026,Jolyne,Kujo,15-01-1997,Female,1618033987,jolyne.kujo@example.com,"48-12, Cape Canaveral, Florida, USA"
+10027,Funny,Valentine,14-09-1960,Male,1618033988,funny.valentine@example.com,"200 White House Ave, Washington, D.C., USA"

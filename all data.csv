@@ -1,0 +1,6 @@
+faculty_id,area_of_specialization,designation,date_of_joining,date_of_associate,date_of_professor,currently_associate,nature_of_association,contract_type,date_of_leaving
+1,Computer Science,Professor,2022-01-01,2022-02-01,2022-03-01,Yes,Full-Time,Permanent,
+2,Physics,Associate Professor,2022-02-01,2022-03-01,,Yes,Part-Time,Contract,2022-06-01
+3,Mathematics,Assistant Professor,2022-03-01,2022-04-01,,No,Full-Time,Permanent,
+4,Chemistry,Associate Professor,2022-04-01,2022-05-01,,Yes,Part-Time,Contract,2022-09-01
+5,Biology,Professor,2022-05-01,2022-06-01,2022-07-01,Yes,Full-Time,Permanent,
